@@ -12,10 +12,10 @@ public class SecurityFilter implements Filter {
         HttpSession session = ((HttpServletRequest) request).getSession(false);
         if (session == null || session.getAttribute("login") == null) {
             System.out.println(((HttpServletRequest) request).getContextPath());
-//            ((HttpServletResponse) response).sendRedirect(
-//                    ((HttpServletRequest) request).getContextPath() + "/index.html");
-          session = ((HttpServletRequest) request).getSession(true);
-        session.setAttribute("login", "edem");
+            ((HttpServletResponse) response).sendRedirect(
+                    ((HttpServletRequest) request).getContextPath() + "/index.html");
+//          session = ((HttpServletRequest) request).getSession(true);
+//        session.setAttribute("login", "edem");
         } else {
             System.out.println("??????????? WHY ???????????");
             chain.doFilter(request, response);

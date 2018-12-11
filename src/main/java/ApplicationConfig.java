@@ -11,6 +11,7 @@ public class ApplicationConfig extends Application {
     public ApplicationConfig() {
         HashSet<Class<?>> c = new HashSet<>();
         c.add(PointController.class);
+        c.add(UserController.class);
         classes = Collections.unmodifiableSet(c);
     }
 

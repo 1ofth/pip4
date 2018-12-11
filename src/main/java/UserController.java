@@ -2,11 +2,13 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 @Stateless
@@ -22,6 +24,7 @@ public class UserController {
                           @FormParam("password") String password,
                           @Context HttpServletResponse resp,
                           @Context HttpServletRequest req) {
+        System.out.println("it works!!!!!!!!!!!!!!!!");
         try {
             User user = userService.findOne(login);
             if (user != null && user.getPassword().equals(password)) {
@@ -57,11 +60,18 @@ public class UserController {
 
     @GET
     @Path("index.html")
-    public void index(@Context HttpServletRequest req,
-                       @Context HttpServletResponse resp) {
+    @Produces({MediaType.TEXT_HTML})
+    public InputStream index(@Context HttpServletRequest req,
+                             @Context HttpServletResponse resp) {
         try {
-            resp.sendRedirect(req.getContextPath() + "/index.html");
-        } catch (Exception e) { e.printStackTrace(); }
+            String base = req.getServletContext().getRealPath("");
+            File f = new File(String.format("%s/%s", base, "index.html"));
+            return new FileInputStream(f);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            // log the error?
+            return null;
+        }
     }
 
     @POST

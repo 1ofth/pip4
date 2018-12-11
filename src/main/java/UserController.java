@@ -59,13 +59,12 @@ public class UserController {
     }
 
     @GET
-    @Path("index.html")
-    @Produces({MediaType.TEXT_HTML})
-    public InputStream index(@Context HttpServletRequest req,
-                             @Context HttpServletResponse resp) {
+    @Path("{path:.*}")
+    public InputStream index(@Context HttpServletRequest req, @PathParam("path") String ee) {
         try {
+            System.out.println("Doesn't fall yet!");
             String base = req.getServletContext().getRealPath("");
-            File f = new File(String.format("%s/%s", base, "index.html"));
+            File f = new File(String.format("%s/%s", base, ee));
             return new FileInputStream(f);
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -73,6 +72,7 @@ public class UserController {
             return null;
         }
     }
+
 
     @POST
     @Path("secure/logout")

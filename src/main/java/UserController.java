@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -64,6 +65,7 @@ public class UserController {
         try {
             System.out.println("Doesn't fall yet!");
             String base = req.getServletContext().getRealPath("");
+            ee = ee.equals("") ? "static/index.html" : ee;
             File f = new File(String.format("%s/%s", base, ee));
             return new FileInputStream(f);
         } catch (FileNotFoundException e) {

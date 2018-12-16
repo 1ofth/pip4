@@ -25,7 +25,6 @@ public class UserController {
                           @FormParam("password") String password,
                           @Context HttpServletResponse resp,
                           @Context HttpServletRequest req) {
-        System.out.println("it works!!!!!!!!!!!!!!!!");
         User user = userService.findOne(login);
         if (user != null && user.getPassword().equals(password)) {
             req.getSession().setAttribute("login", login);

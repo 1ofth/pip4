@@ -19,13 +19,16 @@ class LoginForm extends Component {
         });
     };
 
-
-
     logIn = (evt) => {
         evt.preventDefault();
+
+        let data = new URLSearchParams();
+        data.append('login', this.state.nick);
+        data.append('password', this.state.password);
+
         fetch('http://localhost:8080/pip4/login', {
             method: 'POST',
-            data: new FormData(document.getElementById("formLogIn")),
+            body: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -35,7 +38,7 @@ class LoginForm extends Component {
                 return response.blob();
             }
             throw new Error('Network response was not ok.');
-        }).then(function (myBlob) {
+        }).then(() => {
             window.sessionStorage.setItem('logged', 'true');
             history.push('groups');
         }).catch(function (error) {

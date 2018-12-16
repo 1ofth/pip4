@@ -33,21 +33,6 @@ public class PointController {
 
         return point;
     }
-    @GET
-    @Path("/sec.html")
-    @Produces({MediaType.TEXT_HTML})
-    public InputStream securePage(@Context HttpServletRequest req,
-                             @Context HttpServletResponse resp) {
-        try {
-            String base = req.getServletContext().getRealPath("secure");
-            File f = new File(String.format("%s/%s", base, "sec.html"));
-            return new FileInputStream(f);
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-            // log the error?
-            return null;
-        }
-    }
 
     @GET
     @Path("/getAll")

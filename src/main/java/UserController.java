@@ -21,21 +21,17 @@ public class UserController {
 
     @POST
     @Path("login")
-    public void checkAuth(@FormParam("login") String login,
+    public Response checkAuth(@FormParam("login") String login,
                           @FormParam("password") String password,
                           @Context HttpServletResponse resp,
                           @Context HttpServletRequest req) {
         System.out.println("it works!!!!!!!!!!!!!!!!");
-        try {
-            User user = userService.findOne(login);
-            if (user != null && user.getPassword().equals(password)) {
-                req.getSession().setAttribute("login", login);
-                resp.sendRedirect(req.getContextPath()+ "/secure/sec.html");
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/index.html");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        User user = userService.findOne(login);
+        if (user != null && user.getPassword().equals(password)) {
+            req.getSession().setAttribute("login", login);
+            return Response.status(Response.Status.OK).entity("Logged in.").build();
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("User doesn't exist.").build();
         }
     }
 

@@ -35,16 +35,14 @@ class LoginForm extends Component {
             credentials: 'include'
         }).then((response) => {
             if (response.ok) {
-                return response.blob();
+                window.sessionStorage.setItem('logged', 'true');
+                history.push('groups');
             }
-            throw new Error('Network response was not ok.');
-        }).then(() => {
-            window.sessionStorage.setItem('logged', 'true');
-            history.push('groups');
-        }).catch(function (error) {
+        }).catch((error) => {
             console.log('There has been a problem with your fetch operation: ', error.message);
         });
     };
+
     render() {
         return (
             <div className="main_div">

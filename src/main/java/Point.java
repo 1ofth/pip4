@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "points")
 public class Point {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column

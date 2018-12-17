@@ -28,9 +28,13 @@ public class UserController {
         User user = userService.findOne(login);
         if (user != null && user.getPassword().equals(password)) {
             req.getSession().setAttribute("login", login);
-            return Response.status(Response.Status.OK).entity("Logged in.").build();
+            return Response.status(Response.Status.OK)
+                    .entity("Logged in.")
+                    .build();
         } else {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("User doesn't exist.").build();
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("User doesn't exist.")
+                    .build();
         }
     }
 
@@ -47,7 +51,7 @@ public class UserController {
                 req.getSession().setAttribute("login", login);
                 resp.sendRedirect(req.getContextPath() + "/secure/sec.html");
             } else {
-                resp.sendRedirect(req.getContextPath() +  "/index.html");
+                resp.sendRedirect(req.getContextPath() +   "/index.html");
             }
         } catch (Exception e) {
             e.printStackTrace();

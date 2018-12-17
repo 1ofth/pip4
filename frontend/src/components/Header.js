@@ -1,16 +1,13 @@
-import React, { Component } from "react";
-import '../styles/Header.css';
+import React, {Component} from 'react';
 
-class Header extends Component {
-    render() {
-        return (
-            <div id="header" className="header">
-                <div className="head">Группа P3212</div>
-                <div className="head">Ибраимов Эдем, Морозов Иван</div>
-                <div className="head">Вариант 31517</div>
-            </div>
-        );
-    }
+class Header extends Component{
+  render(){
+    return(
+      <div className='header'>
+      Ibraimov Edem, Morozov Ivan, 569812
+      </div>
+    )
+  }
 }
 
 export default Header;

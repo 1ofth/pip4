@@ -23,11 +23,11 @@ class Chart extends Component{
     }
 
     // get coordinates from inputs; returns coordinates in chart
-    convertCoodinates(xP, yP){
-        let margin = 35;
-
-        return {x: xP*35 + margin, y: yP*35 + margin}
-    }
+    // convertCoodinates(xP, yP){
+    //     let margin = 35;
+    //
+    //     return {x: xP*35 + margin, y: yP*35 + margin}
+    // }
 
     handleClick = event => {
         this.setState({

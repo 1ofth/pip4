@@ -29,20 +29,20 @@ class LoginPage extends Component {
     data.append('login', this.state.login);
     data.append('password', this.state.password);
 
-    fetch('http://localhost:8080/pip4/login', {
+    fetch('http://localhost:8080/lab4/login', {
       method: 'POST',
       body: data,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       credentials: 'include'
-    }).then((response) => {
+    }).then(response => {
       if (response.ok) {
-        window.sessionStorage.setItem('logged', 'true');
-        this.props.signIn(this.state.login)
+        window.sessionStorage.setItem('isAuthorised', 'true');
+        this.props.signIn(this.state.login);
         history.push('main');
       }
-    }).catch((error) => {
+    }).catch(error => {
       this.props.failure();
       console.log('There has been a problem with your fetch operation: ', error.message);
     });

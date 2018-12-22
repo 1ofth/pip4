@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
-import LoginPage from './LoginPage';
 import { newPoint } from '../actions/chartActions';
 import { signOut } from '../actions/loginActions';
 
-import * as axios from "axios/index";
 import {connect} from "react-redux";
 
 import history from '../history'
@@ -26,64 +24,64 @@ class MainPage extends Component{
     this.setState({
       points: []
     });
-    window.sessionStorage.setItem('isAuthorised', false);
+    window.sessionStorage.setItem('isAuthorised', 'false');
     window.sessionStorage.setItem('login', '');
     this.props.signOut();
-    history.push('/log');
+    history.push('login');
     document.location.reload();
   };
 
-  addPoint = (event) => {
-    event.preventDefault();
-
-    this.props.newPoint(this.state.X, this.state.Y, this.state.R);
-
-    let formData = new FormData();
-    formData.set('x', this.state.spinnerX);
-    formData.set('y', this.state.sliderY);
-    formData.set('r', this.state.spinnerR);
-    axios({
-      method: 'post',
-      url: 'http://localhost:8080/lab4/savepoint',
-      data: formData,
-      withCredentials: true
-    }).then(() => {
-      console.log("added");
-      this.getAllPoints();
-    }
-    ).catch(function (error) {
-      console.log(error)
-
-    });
-    this.getAllPoints();
-    drawAllPoints(this.refs, this.state.points, this.state.spinnerR);
-  };
-
-  getAllPoints = () => {
-    axios({
-      method: 'GET',
-      url: 'http://localhost:8080/lab4/getAll',
-      withCredentials: true
-    }).then((res) => {
-      this.setState({
-        points: res.data
-      });
-      drawAllPoints(this.refs, this.state.points, this.state.spinnerR);
-    }
-    ).catch(function (error) {
-      console.log(error)
-    });
-  };
-
-  componentDidMount() {
-    this.getAllPoints();
-    drawCanvas(this.refs, 1);
-    drawMarks(this.refs, this.state.R);
-    drawAllPoints(this.refs, this.state.points, this.props.R);
-  }
+  // addPoint = (event) => {
+  //   event.preventDefault();
+  //
+  //   this.props.newPoint(this.state.X, this.state.Y, this.state.R);
+  //
+  //   let formData = new FormData();
+  //   formData.set('x', this.state.spinnerX);
+  //   formData.set('y', this.state.sliderY);
+  //   formData.set('r', this.state.spinnerR);
+  //   axios({
+  //     method: 'post',
+  //     url: 'http://localhost:8080/lab4/savepoint',
+  //     data: formData,
+  //     withCredentials: true
+  //   }).then(() => {
+  //     console.log("added");
+  //     this.getAllPoints();
+  //   }
+  //   ).catch(function (error) {
+  //     console.log(error)
+  //
+  //   });
+  //   this.getAllPoints();
+  //   drawAllPoints(this.refs, this.state.points, this.state.spinnerR);
+  // };
+  //
+  // getAllPoints = () => {
+  //   axios({
+  //     method: 'GET',
+  //     url: 'http://localhost:8080/lab4/getAll',
+  //     withCredentials: true
+  //   }).then((res) => {
+  //     this.setState({
+  //       points: res.data
+  //     });
+  //     drawAllPoints(this.refs, this.state.points, this.state.spinnerR);
+  //   }
+  //   ).catch(function (error) {
+  //     console.log(error)
+  //   });
+  // };
+  //
+  // componentDidMount() {
+  //   this.getAllPoints();
+  //   drawCanvas(this.refs, 1);
+  //   drawMarks(this.refs, this.state.R);
+  //   drawAllPoints(this.refs, this.state.points, this.props.R);
+  // }
 
   render(){
-    if(sessionStorage.getItem("isAuthorised") !== 'true'){
+    if(sessionStorage.getItem("isAuthorised") === 'true'){
       return (
         <div className="main_div">
           <div className='logOutButton'>
@@ -96,7 +94,7 @@ class MainPage extends Component{
         </div>
       );
     }else{
-      return <Redirect to='/log'/>;
+      return <Redirect to='/lab4/login'/>;
     }
   }
 }
@@ -146,7 +144,7 @@ function drawCanvas(refs, r) {
 
   ctx.beginPath();
   ctx.moveTo(150, 150);
-  ctx.arc(150, 150, 65, Math.PI, -Math.PI*1/2, false);
+  ctx.arc(150, 150, 65, Math.PI, -Math.PI/2, false);
   ctx.closePath();
   ctx.strokeStyle = "black";
   ctx.fillStyle = "lightblue";
@@ -237,6 +235,7 @@ function drawMarks(refs, r){
   ctx.fillStyle = "black";
   ctx.stroke();
 }
+
 function drawAllPoints(refs,points,r) {
   drawCanvas(refs,r);
   points.forEach(function(item) {
@@ -244,7 +243,7 @@ function drawAllPoints(refs,points,r) {
       drawPoint(refs, item.x, item.y, r);
     }
   })
-};
+}
 
 function drawPoint(refs,x,y,r){
   let color;
@@ -260,7 +259,7 @@ function drawPoint(refs,x,y,r){
   ctx.fillStyle = color;
   ctx.fill();
   ctx.closePath();
-};
+}
 
 function isArea(x, y, r) {
   if (

@@ -9,11 +9,11 @@ import MainPage from "./components/MainPage";
 
 export default () =>
   <Switch>
-    <Route path="/login" exact component={LoginPage} />
-    <Route path="/registration" exact component={RegistrationPage}/>
+    <Route path='/lab4/login' exact={true} component={LoginPage} />
+    <Route path='/lab4/registration' exact={true} component={RegistrationPage}/>
 
-    <Route path="/main" exact component={MainPage}/>
-    <Route path="/" exact component={MainPage} />
+    <Route path='/lab4/main' exact={true} component={MainPage}/>
+    <Route path='/lab4/ss' exact={true} component={MainPage} />
 
     <Route component={NotFoundPage} />
   </Switch>;

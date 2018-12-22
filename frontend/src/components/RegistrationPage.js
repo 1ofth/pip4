@@ -28,7 +28,7 @@ class RegistrationPage extends Component {
     data.append('login', this.state.login);
     data.append('password', this.state.password);
 
-    fetch('http://localhost:8080/pip4/registration', {
+    fetch('http://localhost:8080/lab4/registration', {
       method: 'POST',
       body: data,
       headers: {
@@ -38,7 +38,7 @@ class RegistrationPage extends Component {
     }).then((response) => {
       if (response.ok) {
         window.sessionStorage.setItem('logged', 'true');
-        this.props.registrate(this.state.login)
+        this.props.registrate(this.state.login);
         history.push('main');
       }
     }).catch((error) => {

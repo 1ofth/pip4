@@ -17,20 +17,18 @@ import MainPage from "./components/MainPage";
 
 const store = createStore(mainReducer);
 
-
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      <Switch>
-        <Route path="/log" exact component={LoginPage} />
-        <Route path="/reg" exact component={RegistrationPage}/>
+  <Provider store={store} >
+      <Router history={history}>
+          <Switch>
+              <Route path='/lab4/' exact={true} component={MainPage} />
+              <Route path='/lab4/login' exact={true} component={LoginPage} />
+              <Route path='/lab4/registration' exact={true} component={RegistrationPage}/>
+              <Route path='/lab4/main' exact={true} component={MainPage}/>
 
-        <Route path="/main" exact component={MainPage}/>
-        <Route path="/" exact component={MainPage} />
-
-        <Route component={NotFoundPage} />
-      </Switch>
-    </Router>
+              <Route component={NotFoundPage} />
+          </Switch>
+      </Router>
   </Provider>,
   document.getElementById('root')
 );

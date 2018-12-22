@@ -1,0 +1,14 @@
+.header {
+    background: #2c3e50;
+    color: #fff;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.head {
+    padding: 15px;
+    margin: 15px;
+    color: white;
+}

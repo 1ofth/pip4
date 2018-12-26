@@ -6,8 +6,7 @@ import { signOut } from '../actions/loginActions';
 
 import {connect} from "react-redux";
 
-import history from '../history'
-import PointForm from "./PointForm";
+import history from '../history';
 
 class MainPage extends Component{
   constructor(props) {
@@ -18,6 +17,7 @@ class MainPage extends Component{
       R: 1,
       points: []
     };
+    this.canvas = React.createRef();
   }
 
     handleChange = name => event => {
@@ -55,11 +55,10 @@ class MainPage extends Component{
               'Content-Type': 'application/x-www-form-urlencoded'
           },
           credentials: 'include'
-      }).then((response) => {
-          if (response.ok) {
-              console.log(response.json());
-              drawPoint(this.refs.canvas, response.json().x, response.json().y, response.json().r);
-          }
+      }).then(response => response.json())
+          .then(response => {
+              console.log(response);
+              drawPoint(this.refs.canvas, response.x, response.y, response.r);
       }).catch((error) => {
           console.log('There has been a problem with your fetch operation: ', error.message);
       });
@@ -84,11 +83,13 @@ class MainPage extends Component{
   // };
 
   componentDidMount() {
-      console.log(this.canvas);
-    // this.getAllPoints();
-    drawCanvas(this.refs.canvas, 1);
-    drawMarks(this.refs.canvas, this.state.R);
-    drawAllPoints(this.refs.canvas, this.state.points, this.props.R);
+      if(sessionStorage.getItem("isAuthorised") === 'true') {
+          console.log(this.refs.canvas);
+          // this.getAllPoints();
+          drawCanvas(this.refs.canvas, 1);
+          drawMarks(this.refs.canvas, this.state.R);
+          drawAllPoints(this.refs.canvas, this.state.points, this.props.R);
+      }
   }
 
     _onMouseMove = (e) => {
@@ -112,7 +113,7 @@ class MainPage extends Component{
           </div>
 
           <div className="canvasChart">
-              <canvas id="canvas" width="300px" height="300px" ref={(node) => this.canvas = node}
+              <canvas id="canvas" width="300px" height="300px" ref="canvas"
                       onClick={this.interactiveCanvas} onMouseMove={this._onMouseMove}/>
           </div>
             <form id = "pointForm" >

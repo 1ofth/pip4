@@ -70,7 +70,7 @@ class LoginPage extends Component {
         </form>
         {!this.props.failure ? 'Incorrect data' : ''}
 
-        <Link to="/lab4/registration">click me</Link>
+        <Link to="/lab4/registration">click to register</Link>
 
         </div>
       </div>

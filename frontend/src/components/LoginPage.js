@@ -5,6 +5,7 @@ import history from "../history";
 
 import {signIn, failure} from '../actions/loginActions';
 import Header from './Header'
+import {Link} from "react-router-dom";
 
 class LoginPage extends Component {
   constructor(props) {
@@ -67,8 +68,9 @@ class LoginPage extends Component {
         <input type="submit" onClick={this.logIn}/>
 
         </form>
-
         {!this.props.failure ? 'Incorrect data' : ''}
+
+        <Link to="/lab4/registration">click me</Link>
 
         </div>
       </div>

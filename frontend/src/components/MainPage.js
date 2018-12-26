@@ -7,6 +7,7 @@ import { signOut } from '../actions/loginActions';
 import {connect} from "react-redux";
 
 import history from '../history'
+import PointForm from "./PointForm";
 
 class MainPage extends Component{
   constructor(props) {
@@ -18,6 +19,12 @@ class MainPage extends Component{
       points: []
     };
   }
+
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
 
   handleLogOut = (event) => {
     event.preventDefault();
@@ -31,32 +38,35 @@ class MainPage extends Component{
     document.location.reload();
   };
 
-  // addPoint = (event) => {
-  //   event.preventDefault();
-  //
-  //   this.props.newPoint(this.state.X, this.state.Y, this.state.R);
-  //
-  //   let formData = new FormData();
-  //   formData.set('x', this.state.spinnerX);
-  //   formData.set('y', this.state.sliderY);
-  //   formData.set('r', this.state.spinnerR);
-  //   axios({
-  //     method: 'post',
-  //     url: 'http://localhost:8080/lab4/savepoint',
-  //     data: formData,
-  //     withCredentials: true
-  //   }).then(() => {
-  //     console.log("added");
-  //     this.getAllPoints();
-  //   }
-  //   ).catch(function (error) {
-  //     console.log(error)
-  //
-  //   });
-  //   this.getAllPoints();
-  //   drawAllPoints(this.refs, this.state.points, this.state.spinnerR);
-  // };
-  //
+  addPoint = (event) => {
+    event.preventDefault();
+
+    this.props.newPoint(this.state.X, this.state.Y, this.state.R);
+
+      let data = new URLSearchParams();
+      data.append('X', this.state.X);
+      data.append('Y', this.state.Y);
+      data.append('R', this.state.R);
+
+      fetch('http://localhost:8080/lab4/secure/add', {
+          method: 'POST',
+          body: data,
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          credentials: 'include'
+      }).then((response) => {
+          if (response.ok) {
+              console.log(response.json());
+              drawPoint(this.refs.canvas, response.json().x, response.json().y, response.json().r);
+          }
+      }).catch((error) => {
+          console.log('There has been a problem with your fetch operation: ', error.message);
+      });
+    // this.getAllPoints();
+    // drawAllPoints(this.canvas, this.state.points, this.state.R);
+  };
+
   // getAllPoints = () => {
   //   axios({
   //     method: 'GET',
@@ -66,32 +76,80 @@ class MainPage extends Component{
   //     this.setState({
   //       points: res.data
   //     });
-  //     drawAllPoints(this.refs, this.state.points, this.state.spinnerR);
+  //     drawAllPoints(this.canvas, this.state.points, this.state.R);
   //   }
   //   ).catch(function (error) {
   //     console.log(error)
   //   });
   // };
-  //
-  // componentDidMount() {
-  //   this.getAllPoints();
-  //   drawCanvas(this.refs, 1);
-  //   drawMarks(this.refs, this.state.R);
-  //   drawAllPoints(this.refs, this.state.points, this.props.R);
-  // }
 
+  componentDidMount() {
+      console.log(this.canvas);
+    // this.getAllPoints();
+    drawCanvas(this.refs.canvas, 1);
+    drawMarks(this.refs.canvas, this.state.R);
+    drawAllPoints(this.refs.canvas, this.state.points, this.props.R);
+  }
+
+    _onMouseMove = (e) => {
+        this.setState({ X: Math.round((((e.nativeEvent.offsetX - 150) * this.state.R)* 10 / 2 / 65 ))/ 10,
+            Y:  Math.round(((-e.nativeEvent.offsetY + 150) * this.state.R)* 10 / 2 / 65) / 10});
+    };
+
+    interactiveCanvas = () => {
+        let r = this.props.r;
+        let x = this.props.x;
+        let y = this.props.y;
+        // drawPoint(this.canvas,x,y,r);
+        document.getElementById('pointButton').click();
+    };
   render(){
     if(sessionStorage.getItem("isAuthorised") === 'true'){
       return (
         <div className="main_div">
           <div className='logOutButton'>
-            <input type='button' onClick={this.handleLogOut.bind(this)}/>
+            <input type='button'  onClick={this.handleLogOut.bind(this)}/>
           </div>
 
           <div className="canvasChart">
-            <canvas id="canvas" width="300px" height="300px" ref="canvas" onClick={this.interactiveCanvas}/>
+              <canvas id="canvas" width="300px" height="300px" ref={(node) => this.canvas = node}
+                      onClick={this.interactiveCanvas} onMouseMove={this._onMouseMove}/>
           </div>
-        </div>
+            <form id = "pointForm" >
+                Выберите данные:
+
+                Координата X:
+                <select value={this.state.X} onChange={this.handleChange('X')}>
+                    <option value="-5">-5</option>
+                    <option value="-4">-4</option>
+                    <option value="-3">-3</option>
+                    <option value="-2">-2</option>
+                    <option value="-1">-1</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+
+                Координата Y:
+                <input type="text" name="Y" value={this.state.Y} onChange={this.handleChange('Y')}/>
+
+                Радиус R:
+                <select value={this.state.R} onChange={this.handleChange('R')}>
+                    <option value="-5">-5</option>
+                    <option value="-4">-4</option>
+                    <option value="-3">-3</option>
+                    <option value="-2">-2</option>
+                    <option value="-1">-1</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+
+                <input type="submit" id="pointButton" placeholder="Проверить" onClick={this.addPoint}/>
+            </form>
+          </div>
       );
     }else{
       return <Redirect to='/lab4/login'/>;
@@ -118,8 +176,7 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
 
-function drawCanvas(refs, r) {
-  let canvas = refs.canvas;
+function drawCanvas(canvas, r) {
   let ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -198,8 +255,7 @@ function drawCanvas(refs, r) {
 
 }
 
-function drawMarks(refs, r){
-  let canvas = refs.canvas;
+function drawMarks(canvas, r){
   let ctx = canvas.getContext("2d");
 
   console.log(r);
@@ -236,18 +292,17 @@ function drawMarks(refs, r){
   ctx.stroke();
 }
 
-function drawAllPoints(refs,points,r) {
-  drawCanvas(refs,r);
+function drawAllPoints(canvas,points,r) {
+  drawCanvas(canvas,r);
   points.forEach(function(item) {
     if (item.r === r ) {
-      drawPoint(refs, item.x, item.y, r);
+      drawPoint(canvas, item.x, item.y, r);
     }
   })
 }
 
-function drawPoint(refs,x,y,r){
+function drawPoint(canvas,x,y,r){
   let color;
-  let canvas = refs.canvas;
   let ctx = canvas.getContext("2d");
   if (isArea(x,y,r)) {
     color = 'green';

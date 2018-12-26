@@ -61,7 +61,7 @@ class RegistrationPage extends Component {
       <input id="password" name="password" type='password'  value={this.state.password} onChange={this.handleChange('password')} />
       <br/><br/>
 
-      <input type="submit" onClick={this.registrate}/>
+      <input type="submit" onClick={this.logIn}/>
 
       </form>
 

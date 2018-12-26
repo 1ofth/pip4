@@ -4,13 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 @Stateless
 @Path("/")
@@ -69,7 +67,6 @@ public class UserController {
             return new FileInputStream(f);
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
-            // log the error?
             return null;
         }
     }
@@ -81,7 +78,6 @@ public class UserController {
                        @Context HttpServletResponse resp) {
         try {
             req.getSession().invalidate();
-            resp.sendRedirect(req.getContextPath() + "/index.html");
         } catch (Exception e) { e.printStackTrace(); }
     }
 

@@ -48,7 +48,7 @@ class Chart extends Component{
         return(
             <div>
                 <canvas ref="canvas" width={this.state.width} onClick={this.handleClick} height={this.state.height}/>
-                <img ref='image' src='../chart.png' className="hidden" alt='qqq'/>
+                <img ref='image' src='../logo.svg' className="hidden" alt='qqq'/>
             </div>
         )
     }

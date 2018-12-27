@@ -1,34 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 
-import { createStore } from "redux";
-import { mainReducer } from "./reducers/mainReducer";
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import { Router, Switch, Route } from 'react-router-dom';
-import { Provider } from 'react-redux'
+import { createBrowserHistory } from 'history';
+import { Router, Route, Switch } from 'react-router';
 
-import history from './history'
+import RegisterComponent from "./components/RegisterComponent";
 
-import NotFoundPage from "./components/NotFoundPage";
-import LoginPage from "./components/LoginPage";
-import RegistrationPage from "./components/RegistrationPage";
-import MainPage from "./components/MainPage";
+import MainReducer from "./store/MainReducer";
 
-const store = createStore(mainReducer);
+import LoginPage from "./Containers/LoginPage";
+
+
+const store = createStore(MainReducer);
+console.log(store.getState());
 
 ReactDOM.render(
-  <Provider store={store} >
-      <Router history={history}>
-          <Switch>
-              <Route path='/lab4/' exact={true} component={MainPage} />
-              <Route path='/lab4/login' exact={true} component={LoginPage} />
-              <Route path='/lab4/registration' exact={true} component={RegistrationPage}/>
-              <Route path='/lab4/main' exact={true} component={MainPage}/>
-
-              <Route component={NotFoundPage} />
-          </Switch>
-      </Router>
+  <Provider store={store}>
+    <Router history={createBrowserHistory()}>
+      <Switch>
+        <Route path={'/lab4/log'} component={LoginPage} />
+        <Route path={'/lab4/reg'} component={RegisterComponent}/>
+      </Switch>
+    </Router>
   </Provider>,
   document.getElementById('root')
 );

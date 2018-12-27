@@ -1,15 +1,16 @@
-import React, {Component} from 'react';
-import '../styles/Header.css';
-class Header extends Component{
+import React from 'react';
+
+export default class Header extends React.Component{
   render(){
     return(
-        <div id="header" className="header">
-            <div className="head">Группа P3212</div>
-            <div className="head">Ибраимов Эдем, Морозов Иван</div>
-            <div className="head">Вариант 31517</div>
+      <div className={"header"}>
+        <div className={'authors'} >
+             Ибраимов Эдем, Морозов Иван, P3212.
         </div>
+        <div className={'Variant'}>
+          569812
+        </div>
+      </div>
     )
   }
 }
-
-export default Header;

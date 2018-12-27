@@ -41,5 +41,11 @@ public class Point {
         this.inArea = inArea;
         this.user = user;
     }
+
+
+    @Override
+    public String toString() {
+        return "{\"x\":"+this.x+",\n\"y\":"+this.y+",\n\"r\":"+this.r+",\n\"inArea\":"+this.inArea+"}";
+    }
 }
 

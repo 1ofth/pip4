@@ -20,9 +20,8 @@ public class UserController {
     @POST
     @Path("login")
     public Response checkAuth(@FormParam("login") String login,
-                          @FormParam("password") String password,
-                          @Context HttpServletResponse resp,
-                          @Context HttpServletRequest req) {
+                              @FormParam("password") String password,
+                              @Context HttpServletRequest req) {
         User user = userService.findOne(login);
         if (user != null && user.getPassword().equals(password)) {
             req.getSession().setAttribute("login", login);
@@ -38,32 +37,32 @@ public class UserController {
 
     @POST
     @Path("registration")
-    public void newUser(@FormParam("login") String login,
-                        @FormParam("password") String password,
-                        @Context HttpServletResponse resp,
-                        @Context HttpServletRequest req) {
-        try {
-            User user = new User(login, password);
-            if (validateCredentials(login, password)  && userService.findOne(login) == null) {
-                userService.saveUser(user);
-                req.getSession().setAttribute("login", login);
-                resp.sendRedirect(req.getContextPath() + "/secure/sec.html");
-            } else {
-                resp.sendRedirect(req.getContextPath() +   "/index.html");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public Response newUser(@FormParam("login") String login,
+                            @FormParam("password") String password,
+                            @Context HttpServletRequest req) {
+
+        User user = new User(login, password);
+        if (validateCredentials(login, password) && userService.findOne(login) == null) {
+            userService.saveUser(user);
+            req.getSession().setAttribute("login", login);
+            return Response.status(Response.Status.CREATED)
+                    .entity("User was successfully registered.")
+                    .build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Failed to create a user.")
+                    .build();
         }
     }
 
     @GET
     @Path("{path:.*}")
-    public InputStream index(@Context HttpServletRequest req, @PathParam("path") String ee) {
+    public InputStream index(@Context HttpServletRequest req, @PathParam("path") String path) {
         try {
             System.out.println("Doesn't fall yet!");
             String base = req.getServletContext().getRealPath("");
-            ee = ee.equals("") ? "static/index.html" : ee;
-            File f = new File(String.format("%s/%s", base, ee));
+            path = path.equals("") ? "static/index.html" : path;
+            File f = new File(String.format("%s/%s", base, path));
             return new FileInputStream(f);
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -78,12 +77,18 @@ public class UserController {
                        @Context HttpServletResponse resp) {
         try {
             req.getSession().invalidate();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private boolean validateCredentials(String login, String password){
-        if (login.length() < 5 || login.length() > 20) return false;
-        if (password.length() < 5 || password.length() > 20) return false;
+    private boolean validateCredentials(String login, String password) {
+        if (login == null || login.equals("") || login.length() > 15) {
+            return false;
+        }
+        if (password == null || password.equals("") || password.length() > 15) {
+            return false;
+        }
         return true;
     }
 }

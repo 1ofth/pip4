@@ -39,9 +39,8 @@ class MainPage extends Component{
   };
 
   addPoint = (event) => {
-    event.preventDefault();
-
-    this.props.newPoint(this.state.X, this.state.Y, this.state.R);
+      event.preventDefault();
+      this.props.newPoint(this.state.X, this.state.Y, this.state.R);
 
       let data = new URLSearchParams();
       data.append('X', this.state.X);
@@ -62,33 +61,31 @@ class MainPage extends Component{
       }).catch((error) => {
           console.log('There has been a problem with your fetch operation: ', error.message);
       });
-    // this.getAllPoints();
-    // drawAllPoints(this.canvas, this.state.points, this.state.R);
   };
 
-  // getAllPoints = () => {
-  //   axios({
-  //     method: 'GET',
-  //     url: 'http://localhost:8080/lab4/getAll',
-  //     withCredentials: true
-  //   }).then((res) => {
-  //     this.setState({
-  //       points: res.data
-  //     });
-  //     drawAllPoints(this.canvas, this.state.points, this.state.R);
-  //   }
-  //   ).catch(function (error) {
-  //     console.log(error)
-  //   });
-  // };
+  getAllPoints = () => {
+      fetch('http://localhost:8080/lab4/secure/getAll', {
+          method: 'GET'
+      }).then(response => response.json())
+          .then(response => {
+              console.log(response);
+              this.setState({
+                  points: response
+              });
+              drawAllPoints(this.refs.canvas, this.state.points, this.state.R);
+
+          }).catch((error) => {
+          console.log('There has been a problem with your fetch operation: ', error.message)
+      });
+  };
 
   componentDidMount() {
       if(sessionStorage.getItem("isAuthorised") === 'true') {
           console.log(this.refs.canvas);
-          // this.getAllPoints();
+          this.getAllPoints();
           drawCanvas(this.refs.canvas, 1);
           drawMarks(this.refs.canvas, this.state.R);
-          drawAllPoints(this.refs.canvas, this.state.points, this.props.R);
+          // drawAllPoints(this.refs.canvas, this.state.points, this.state.R);
       }
   }
 
@@ -297,6 +294,7 @@ function drawAllPoints(canvas,points,r) {
   drawCanvas(canvas,r);
   points.forEach(function(item) {
     if (item.r === r ) {
+        console.log(item);
       drawPoint(canvas, item.x, item.y, r);
     }
   })
@@ -318,13 +316,14 @@ function drawPoint(canvas,x,y,r){
 }
 
 function isArea(x, y, r) {
-  if (
-    ((x <= 0) && (y >= 0) && (y <= (r+x)/2)) ||
-    ((x >= 0) && (y >= 0) && ((x * x + y * y) <= (r * r ))) ||
-    ((x >= 0) && (y <= 0) && (x <= r/2) && (y >= -r))
-  ) {
-    return true;
-  }
+    if(x>=0 && y<=0  && y >= x - r){
+        return true;
+    }
+    if(x>=0 && y>=0 && y<=r && x<=r ){
+        return true;
+    }
+    if(x<=0 && y>=0 && y*y + x*x <= (r/2)*(r/2)){
+        return true;
+    }
   return false;
-
 }

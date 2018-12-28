@@ -15,12 +15,22 @@ class DataInputComponent extends React.Component{
   }
 
   handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
+
+    if(!isNaN(parseFloat((String)(event.target.value).replace(',', '.')))) {
+      this.setState({
+        [name]: (String)(event.target.value).replace(',', '.'),
+      });
+      this.props.makeWarning('');
+    } else {
+      this.props.makeWarning(name + " should be a number");
+    }
   };
 
   changeR = r => event => {
+    this.setState({
+      r: event.target.value,
+    });
+
     this.props.updateChart(event.target.value);
   };
 
@@ -73,7 +83,7 @@ class DataInputComponent extends React.Component{
 
         <div className={'inputField'}>
           R
-          <select value={1} onChange={this.changeR('r')}>
+          <select onChange={this.changeR('r')}>
             <option value={'5'}>5</option>
             <option value={'4'}>4</option>
             <option value={'3'}>3</option>
@@ -83,8 +93,11 @@ class DataInputComponent extends React.Component{
         </div>
 
         <input
-          id={'checkDotButton'}
+          id={'dotButton'}
           type={'button'}
+          disabled={
+            this.props.warning !== undefined && (String)(this.props.warning).indexOf('should be a number') >= 0
+          }
           onClick={this.checkDot(this.state.x, this.state.y, this.state.r)}
           value={'Check'}
         />
@@ -95,7 +108,8 @@ class DataInputComponent extends React.Component{
 
 const mapStateToProps = (state) => {
   return {
-    chartR: state.chartR
+    chartR: state.chartR,
+    warning: state.message
   };
 };
 

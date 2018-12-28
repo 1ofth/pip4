@@ -29,6 +29,10 @@ class LoginComponent extends React.Component{
 
   // TODO make it work!
   loginUser = (login, password) => event => {
+    window.sessionStorage.setItem('isAuthorised', 'true');
+    window.sessionStorage.setItem('login', login);
+    this.props.loginU(login);
+    history.push('main');
 
     let data = new URLSearchParams();
     data.append('login', login);
@@ -59,33 +63,44 @@ class LoginComponent extends React.Component{
   render(){
     return (
 
-        <div className={'inputs'}>
-          <div>
-            Login
-            <input
-              type='text'
-              onChange={this.handleChange('login')}
-            />
-          </div>
+        <table className={'inputs'}>
+          <tr>
+            <td>Login</td>
+            <td>
+              <input
+                type='text'
+                onChange={this.handleChange('login')}
+              />
+            </td>
+          </tr>
 
-          <div>
-            Password
-            <input
-              type='text'
-              onChange={this.handleChange('password')}
-            />
-          </div>
+          <tr>
+            <td>Password</td>
+            <td>
+              <input
+                type='text'
+                onChange={this.handleChange('password')}
+              />
+            </td>
+          </tr>
 
-          <div>{this.props.warning}</div>
+          <tr>
+            <td></td>
+            <td >
+              <input
+                type='button'
+                value='Login'
+                onClick={this.loginUser(this.state.login, this.state.password)}
+              />
+            </td>
+          </tr>
 
-          <div>
-            <input
-              type='button'
-              value='Login'
-              onClick={this.loginUser(this.state.login, this.state.password)}
-            />
-          </div>
-        </div>
+          <tr >
+            <td colSpan={2}>
+              {this.props.warning}
+            </td>
+          </tr>
+        </table>
     );
   }
 }

@@ -14,26 +14,39 @@ class Header extends React.Component{
 
   render(){
     return(
-      <div>
-        <div id={'userName'}>
-            {
-              window.sessionStorage.getItem('isAuthorised') === 'true'
-                ? window.sessionStorage.getItem('login')
-                : 'Anonymous'
-            }
-        </div>
+      <div className={'header'}>
         <div id={'authors'} >
-             Ибраимов Эдем, Морозов Иван, P3212.
+             Ибраимов Эдем, Морозов Иван, P3212
         </div>
         <div id={'variant'}>
-          569812
+          Вариант: 569812
         </div>
-        <input
-          type="button"
-          value="logout"
-          hidden={!(window.sessionStorage.getItem('isAuthorised') === 'true')}
-          onClick={this.logOut()}
-        />
+
+        <div id={'userMenu'}>
+          <table>
+            <tbody>
+              <tr>
+                <td id={'userName'}>
+              Hello,
+              {
+                window.sessionStorage.getItem('isAuthorised') === 'true'
+                  ? window.sessionStorage.getItem('login')
+                  : '  Anonymous'
+              }
+                </td>
+                <td id={'spacer'}></td>
+                <td>
+                  <input id={'logoutButton'}
+                    type="button"
+                    value="logout"
+                    style={ window.sessionStorage.getItem('isAuthorised') !== 'true' ? { 'display':'none'} : {} }
+                    onClick={this.logOut()}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     )
   }

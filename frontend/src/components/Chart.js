@@ -223,12 +223,8 @@ class Chart extends Component{
   render(){
     return(
       <div>
-        {this.props.chartR}
         {this.props.updateChart !== undefined && this.props.updateChart === true ? this.updateCanvas() : ''}
-        <canvas id={'chart'} ref="canvas" width={this.state.width} onClick={this.handleClick} height={this.state.height}/>
-
-        <div className={'warning'}> {this.props.warning}
-        </div>
+        <canvas ref="canvas" width={this.state.width} onClick={this.handleClick} height={this.state.height}/>
       </div>
     )
   }

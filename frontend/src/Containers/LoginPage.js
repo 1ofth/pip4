@@ -2,27 +2,35 @@ import React from 'react';
 import Header from "../components/Header";
 import Links from "../components/Links";
 import LoginComponent from "../components/LoginComponent";
-import '../styles/common.css';
+
 
 export default class LoginPage extends React.Component{
   render(){
     return (
       <div className={'container'}>
+        <div></div>
 
         <div>
-          <div className={'header'}>
-            <Header/>
-          </div>
+          <Header/>
 
-          <hr/>
+          {window.sessionStorage.getItem('isAuthorised') === 'true'
+            ?
+            <div className={'warning'}>
+              To login again, please, log out.
+            </div>
+            :
+            <div>
 
-          <LoginComponent/>
+              <div className={'title'}>
+                Enter your data to login
+              </div>
 
-          <hr/>
+              <LoginComponent/>
 
-          <Links/>
+              <Links/>
+            </div>
+          }
         </div>
-
       </div>
     );
   }

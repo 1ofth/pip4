@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import './styles/common.css';
+
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
@@ -14,6 +16,8 @@ import MainPage from './Containers/MainPage';
 import NotFoundPage from './Containers/NotFoundPage';
 import {PrivateRoute} from "./PrivateRoute";
 const store = createStore(MainReducer);
+
+
 
 export const path = '/lab4/';
 

@@ -5,17 +5,26 @@ import { connect } from 'react-redux';
 import Chart from "../components/Chart";
 import DataInputComponent from "../components/DataInputComponent";
 import TableComponent from "../components/TableComponent";
+import WarningComponent from "../components/WarningComponent";
 
 class LoginPage extends React.Component{
   render(){
     return (
-      <div>
+      <div className={'container'}>
         <Header/>
         { !(window.sessionStorage.getItem('isAuthorised') === 'true') ? 'No permission' :
 
-          <div>
-            <Chart/>
-            <DataInputComponent/>
+          <div id={'mainPageContainer'}>
+            <div id={'chart'}>
+              <Chart/>
+            </div>
+
+            <div id={'dataInput'}>
+              <DataInputComponent/>
+            </div>
+
+            <WarningComponent/>
+
             <TableComponent/>
           </div>
         }

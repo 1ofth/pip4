@@ -2,32 +2,70 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import history from '../History';
+
 import {
-  doLogin,
-  changeLogin,
-  changePassword,
-  doWarningIncorrectLoginData
+  makeWarning, registered
 } from '../store/Actions';
 
 class RegisterComponent extends React.Component{
+  constructor(props){
+    super(props);
+
+    this.state = {
+      login: '',
+      password: ''
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
+
+  // TODO make it work!
+  registerUser = (login, password) => event => {
+
+    // restore this condition
+    if(login.length > 0 && password.length > 0){
+      this.props.registered(login);
+      history.push('main');
+      return;
+    }
+
+    let data = new URLSearchParams();
+    data.append('login', login);
+    data.append('password', password);
+
+    fetch('http://localhost:8080/lab4/registration', {
+      method: 'POST',
+      body: data,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      credentials: 'include'
+    }).then(response => {
+      if (response.ok) {
+        console.log("!");
+
+      }
+    }).catch(error => {
+        this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
+    });
+  };
+
   render(){
-
-    const {
-      logIn,
-      changeLoginValue,
-      changePasswordValue,
-      doWarning
-    } = this.props;
-
     return (
-      <div>
+      <div className={'userDataBlock'}>
         <div>
           <input
             type='text'
             value = {this.props.login}
-            onChange={ (event) => {
-              changeLoginValue(event.target.value);
-            }}
+            onChange={this.handleChange('login')}
           />
         </div>
 
@@ -35,9 +73,7 @@ class RegisterComponent extends React.Component{
           <input
             type='text'
             value = {this.props.password}
-            onChange={(event) => {
-              changePasswordValue(event.target.value);
-            }}
+            onChange={this.handleChange('password')}
           />
         </div>
 
@@ -46,11 +82,8 @@ class RegisterComponent extends React.Component{
         <div>
           <input
             type='button'
-            value='login'
-            onClick={ (event) => {
-              logIn(this.props.login, this.props.password);
-              doWarning();
-            }}
+            value='Register'
+            onClick={this.registerUser(this.state.login, this.state.password)}
           />
         </div>
       </div>
@@ -60,20 +93,15 @@ class RegisterComponent extends React.Component{
 
 const mapStateToProps = (state) => {
   return {
-    login: state.login,
-    password: state.password,
-    warning: state.warning
+    warning: state.message
   };
 };
 
-const putActionsToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    logIn: bindActionCreators(doLogin, dispatch),
-    changeLoginValue: bindActionCreators(changeLogin, dispatch),
-    changePasswordValue: bindActionCreators(changePassword, dispatch),
-    doWarning:
-      bindActionCreators(doWarningIncorrectLoginData, dispatch),
-  };
+    makeWarning : bindActionCreators(makeWarning, dispatch),
+      registered: bindActionCreators(registered, dispatch)
+  }
 };
 
-export default connect(mapStateToProps, putActionsToProps)(RegisterComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterComponent);

@@ -1,35 +1,44 @@
 import {
   initialState,
-  CHANGE_LOGIN,
-  CHANGE_PASSWORD,
-  WARNING_INCORRECT_LOGIN_DATA, WARNING_INCORRECT_DATA, REGISTRATION_COMPLETED, REGISTRATION_FAILED
+  REGISTRATION_COMPLETED,
+  REGISTRATION_FAILED,
+  WARNING,
+  LOGOUT,
+  LOGIN_SACCEED,
+  DOT_ADDED,
+  DOTS_LOADED,
+  UPDATE_CHART, UPDATE_CHART_FINISHED
 } from "./States";
 
 export default function MainReducer(state = initialState, action) {
-  console.log("log:\t"+action.type);
+  console.log("\t"+action.type);
   switch (action.type) {
-
-
-
-    case WARNING_INCORRECT_LOGIN_DATA:
+    case WARNING:
       return { ...state, message: action.payload };
 
-    case CHANGE_LOGIN:
-      return { ...state, login: action.payload, message: action.message};
-
-    case CHANGE_PASSWORD:
-      return { ...state, password: action.payload};
-
-
-
-    case WARNING_INCORRECT_DATA:
-      return { ...state, message: action.payload };
+    case LOGOUT:
+      return { ...state, login: ''};
 
     case REGISTRATION_COMPLETED:
-      return { ...state, message: action.payload};
+      return { ...state, login: action.payload};
+
+    case LOGIN_SACCEED:
+      return { ...state, login: action.payload};
 
     case REGISTRATION_FAILED:
-      return { ...state, message: action.payload};
+      return { ...state, message: 'Registration failed'};
+
+    case DOT_ADDED:
+      return { ...state, updateTable: true};
+
+    case DOTS_LOADED:
+      return { ...state, updateTable: false};
+
+    case UPDATE_CHART:
+      return { ...state, chartR: action.payload,  updateChart: true};
+
+    case UPDATE_CHART_FINISHED:
+      return { ...state, updateChart: false};
 
     default:
       return state;

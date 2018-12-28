@@ -1,17 +1,21 @@
 export const INITIAL_STATE = 'INITIAL_STATE';
 export const initialState = {
   type: INITIAL_STATE,
-  logged: false,
-  message: ''
+  login: '',
+  message: '',
+  chartR: 1
 };
 
 // for login
-export const WARNING_INCORRECT_LOGIN_DATA = 'WARNING_INCORRECT_LOGIN_DATA';
+export const WARNING = 'WARNING';
 export const LOGIN_SACCEED = 'LOGIN_SACCEED';
-export const CHANGE_LOGIN = 'CHANGE_LOGIN';
-export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
-
+export const LOGOUT = 'LOGOUT';
 // for registration
-export const WARNING_INCORRECT_DATA = 'WARNING_INCORRECT_DATA';
 export const REGISTRATION_COMPLETED = 'REGISTRATION_COMPLETED';
 export const REGISTRATION_FAILED = 'REGISTRATION_FAILED';
+// for chart
+export const DOT_ADDED = 'DOT_ADDED';
+export const UPDATE_CHART = 'UPDATE_CHART';
+export const UPDATE_CHART_FINISHED = 'UPDATE_CHART_FINISHED';
+// for table
+export const DOTS_LOADED = 'DOTS_LOADED';

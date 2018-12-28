@@ -1,13 +1,30 @@
 import React from 'react';
-import LoginComponent from "../components/LoginComponent";
 import Header from "../components/Header";
+import Links from "../components/Links";
+import LoginComponent from "../components/LoginComponent";
+import '../styles/common.css';
 
 export default class LoginPage extends React.Component{
   render(){
     return (
-      <div style={{background: 'yellow'}}>
-        <Header/>
-        <LoginComponent/>
+      <div className={'container'}>
+        <div></div>
+
+        <div>
+          <div className={'header'}>
+            <Header/>
+          </div>
+
+          <hr/>
+
+          <LoginComponent/>
+
+          <hr/>
+
+          <Links/>
+        </div>
+
+        <div></div>
       </div>
     );
   }

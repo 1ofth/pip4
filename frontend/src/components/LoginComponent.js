@@ -30,15 +30,6 @@ class LoginComponent extends React.Component{
   // TODO make it work!
   loginUser = (login, password) => event => {
 
-    // restore this condition
-    if(login.length > 0 && password.length > 0){
-      window.sessionStorage.setItem('isAuthorised', 'true');
-      window.sessionStorage.setItem('login', login);
-      this.props.loginU(login);
-      history.push('main');
-      return;
-    }
-
     let data = new URLSearchParams();
     data.append('login', login);
     data.append('password', password);
@@ -58,7 +49,6 @@ class LoginComponent extends React.Component{
         window.sessionStorage.setItem('login', login);
         this.props.loginU(login);
         history.push('main');
-        return;
       }
 
     }).catch(error => {

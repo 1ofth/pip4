@@ -47,11 +47,11 @@ class Chart extends Component{
       event.pageY - this.refs.canvas.offsetTop);
 
     let data = new URLSearchParams();
-    data.append('x', x);
-    data.append('y', y);
-    data.append('r', this.props.chartR);
+    data.append('X', x);
+    data.append('Y', y);
+    data.append('R', this.props.chartR);
 
-    fetch('http://localhost:8080/lab4/add', {
+    fetch('http://localhost:8080/lab4/secure/add', {
       method: 'POST',
       body: data,
       headers: {
@@ -73,11 +73,10 @@ class Chart extends Component{
     this.draw(this.props.chartR);
   }
 
-  // TODO
+  // TODO this function is never called
   updateDots(){
-    fetch({
+    fetch('http://localhost:8080/lab4/secure/getAll', {
       method: 'GET',
-      url: 'http://localhost:8080/lab4/getAll',
       withCredentials: true
     }).then((res) => {
         this.setState({

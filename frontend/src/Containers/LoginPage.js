@@ -8,7 +8,6 @@ export default class LoginPage extends React.Component{
   render(){
     return (
       <div className={'container'}>
-        <div></div>
 
         <div>
           <div className={'header'}>
@@ -24,7 +23,6 @@ export default class LoginPage extends React.Component{
           <Links/>
         </div>
 
-        <div></div>
       </div>
     );
   }

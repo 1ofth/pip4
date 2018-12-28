@@ -26,11 +26,11 @@ class DataInputComponent extends React.Component{
 
   checkDot = (x, y, r) => event => {
     let data = new URLSearchParams();
-    data.append('x', x);
-    data.append('y', y);
-    data.append('r', r);
+    data.append('X', x);
+    data.append('Y', y);
+    data.append('R', r);
 
-    fetch('http://localhost:8080/lab4/add', {
+    fetch('http://localhost:8080/lab4/secure/add', {
       method: 'POST',
       body: data,
       headers: {

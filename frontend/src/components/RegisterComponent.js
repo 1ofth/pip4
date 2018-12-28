@@ -30,13 +30,6 @@ class RegisterComponent extends React.Component{
   // TODO make it work!
   registerUser = (login, password) => event => {
 
-    // restore this condition
-    if(login.length > 0 && password.length > 0){
-      this.props.registered(login);
-      history.push('main');
-      return;
-    }
-
     let data = new URLSearchParams();
     data.append('login', login);
     data.append('password', password);
@@ -51,7 +44,8 @@ class RegisterComponent extends React.Component{
     }).then(response => {
       if (response.ok) {
         console.log("!");
-
+        this.props.registered(login);
+        history.push('main');
       }
     }).catch(error => {
         this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);

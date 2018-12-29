@@ -83,6 +83,8 @@ class Chart extends Component{
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       credentials: 'include'
+    }).then( () => {
+      this.props.newDot(a.x, a.y, r, checkInArea(a.x, a.y, r));
     }).catch(error => {
       this.props.makeWarning('There has been a problem with your fetch operation: ' + error.message);
     });

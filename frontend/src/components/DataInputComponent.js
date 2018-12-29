@@ -50,12 +50,15 @@ class DataInputComponent extends React.Component{
       credentials: 'include'
     }).then(response => {
       if (response.ok) {
-        this.props.newDot(x, y, r, checkInArea(x, y, r));
         this.props.makeWarning('');
       }
+    }).then( () => {
+      this.props.newDot(x, y, r, checkInArea(x, y, r));
     }).catch(error => {
       this.props.makeWarning('There has been a problem with your fetch operation: ' + error.message);
     });
+
+
   };
 
   render(){
@@ -101,6 +104,12 @@ class DataInputComponent extends React.Component{
           onClick={this.checkDot(this.state.x, this.state.y, this.state.r)}
           value={'Check'}
         />
+
+        <div id={'info'}>
+          X ∈ [-5; 3]
+          Y ∈ [-3; 5]
+          R ∈ [0; 5]
+        </div>
       </div>
     );
   }

@@ -26,7 +26,7 @@ public class PointController {
     @Path("add")
     public Response newPoint(@FormParam("X") double x, @FormParam("Y") double y ,
                              @FormParam("R") double r, @Context HttpServletRequest request ) {
-        if (r < 0 || r > 5  || x < -2 || x > 2 || y < -3 || y > 5) {
+        if (r < 0 || r > 5  || x < -5 || x > 3 || y < -3 || y > 5) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Incorrect input data")
                     .build();

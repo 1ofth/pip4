@@ -48,6 +48,11 @@ export function updateTable() {
     type: DOT_ADDED
   }
 }
+export function updateTableFinished() {
+  return{
+    type: DOTS_LOADED
+  }
+}
 
 export function updateChart(newR) {
   return{

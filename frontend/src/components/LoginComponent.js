@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import {Link} from 'react-router-dom';
+
 import history from '../History';
 
 import {
@@ -21,6 +23,10 @@ class LoginComponent extends React.Component{
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidUpdate() {
+    this.props.makeWarning('');
+  }
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
@@ -29,10 +35,13 @@ class LoginComponent extends React.Component{
 
   // TODO make it work!
   loginUser = (login, password) => event => {
-    window.sessionStorage.setItem('isAuthorised', 'true');
-    window.sessionStorage.setItem('login', login);
-    this.props.loginU(login);
-    history.push('main');
+    // window.sessionStorage.setItem('isAuthorised', 'true');
+    // window.sessionStorage.setItem('login', login);
+    // this.props.loginU(login);
+    // this.props.makeWarning('');
+    // history.push('main');
+    //
+    // return ;
 
     let data = new URLSearchParams();
     data.append('login', login);
@@ -45,16 +54,21 @@ class LoginComponent extends React.Component{
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       credentials: 'include'
-
-    }).then(response => {
-      if (response.ok) {
-        // redirect to main page
+    }).then((response) => {
+      return response.text();
+    }).then( (data) => {
+      if(data === 'User doesn\'t exist'){
+        this.props.makeWarning('User ' + login + ' doesn\'t exist');
+      } else if(data === 'Incorrect password'){
+        this.props.makeWarning('Incorrect password');
+      } else {
         window.sessionStorage.setItem('isAuthorised', 'true');
         window.sessionStorage.setItem('login', login);
         this.props.loginU(login);
+        this.props.makeWarning('');
         history.push('main');
       }
-
+      return;
     }).catch(error => {
       this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
     });
@@ -62,44 +76,45 @@ class LoginComponent extends React.Component{
 
   render(){
     return (
-
         <table className={'inputs'}>
-          <tr>
-            <td>Login</td>
-            <td>
-              <input
-                type='text'
-                onChange={this.handleChange('login')}
-              />
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>Login</td>
+              <td>
+                <input
+                  type='text'
+                  onChange={this.handleChange('login')}
+                />
+              </td>
+            </tr>
 
-          <tr>
-            <td>Password</td>
-            <td>
-              <input
-                type='text'
-                onChange={this.handleChange('password')}
-              />
-            </td>
-          </tr>
+            <tr>
+              <td>Password</td>
+              <td>
+                <input
+                  type='text'
+                  onChange={this.handleChange('password')}
+                />
+              </td>
+            </tr>
 
-          <tr>
-            <td></td>
-            <td >
-              <input
-                type='button'
-                value='Login'
-                onClick={this.loginUser(this.state.login, this.state.password)}
-              />
-            </td>
-          </tr>
+            <tr>
+              <td></td>
+              <td >
+                <input
+                  type='button'
+                  value='Login'
+                  onClick={this.loginUser(this.state.login, this.state.password)}
+                />
+              </td>
+            </tr>
 
-          <tr >
-            <td colSpan={2}>
-              {this.props.warning}
-            </td>
-          </tr>
+            <tr >
+              <td colSpan={2}>
+                Not registered yet? <Link to={'reg'}>Register!</Link>
+              </td>
+            </tr>
+          </tbody>
         </table>
     );
   }

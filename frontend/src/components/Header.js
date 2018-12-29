@@ -9,6 +9,7 @@ class Header extends React.Component{
     this.props.logout();
     window.sessionStorage.setItem('isAuthorised', 'false');
     window.sessionStorage.setItem('login', '');
+    this.props.makeWarning('');
     history.push('log');
   };
 

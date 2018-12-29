@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import history from '../History';
+import {Link} from "react-router-dom";
 
 import {
   makeWarning, registered
 } from '../store/Actions';
+
 
 class RegisterComponent extends React.Component{
   constructor(props){
@@ -29,7 +31,6 @@ class RegisterComponent extends React.Component{
 
   // TODO make it work!
   registerUser = (login, password) => event => {
-
     let data = new URLSearchParams();
     data.append('login', login);
     data.append('password', password);
@@ -45,41 +46,59 @@ class RegisterComponent extends React.Component{
       if (response.ok) {
         console.log("!");
         this.props.registered(login);
+        window.sessionStorage.setItem('isAuthorised', 'true');
+        window.sessionStorage.setItem('login', login);
+        this.props.makeWarning('');
+        history.push('main');
         history.push('main');
       }
     }).catch(error => {
-        this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
+      this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
     });
   };
 
   render(){
     return (
-      <div className={'userDataBlock'}>
-        <div>
-          <input
-            type='text'
-            value = {this.props.login}
-            onChange={this.handleChange('login')}
-          />
-        </div>
+      <div>
+          <table className={'inputs'}>
+            <tr>
+              <td>Login</td>
+              <td>
+                <input
+                  type='text'
+                  onChange={this.handleChange('login')}
+                />
+              </td>
+            </tr>
 
-        <div>
-          <input
-            type='text'
-            value = {this.props.password}
-            onChange={this.handleChange('password')}
-          />
-        </div>
+            <tr>
+              <td>Password</td>
+              <td>
+                <input
+                  type='text'
+                  onChange={this.handleChange('password')}
+                />
+              </td>
+            </tr>
 
-        <div>{this.props.warning}</div>
+            <tr>
+              <td></td>
+              <td >
+                <input
+                  type='button'
+                  value='Register'
+                  onClick={this.registerUser(this.state.login, this.state.password)}
+                />
+              </td>
+            </tr>
 
-        <div>
-          <input
-            type='button'
-            value='Register'
-            onClick={this.registerUser(this.state.login, this.state.password)}
-          />
-        </div>
+            <tr >
+              <td colSpan={2}>
+                Already have account? <Link to={'log'}>Log in!</Link>
+              </td>
+            </tr>
+
+          </table>
       </div>
     );
   }

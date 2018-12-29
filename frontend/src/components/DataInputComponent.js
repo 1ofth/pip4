@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {bindActionCreators} from "redux";
-import {addDot, makeWarning, updateChart} from "../store/Actions";
+import {addDot, makeWarning, updateChart, updateTable} from "../store/Actions";
+import { checkInArea } from './Chart';
 
 class DataInputComponent extends React.Component{
   constructor(props){
@@ -15,12 +16,12 @@ class DataInputComponent extends React.Component{
   }
 
   handleChange = name => event => {
-
     if(!isNaN(parseFloat((String)(event.target.value).replace(',', '.')))) {
       this.setState({
         [name]: (String)(event.target.value).replace(',', '.'),
       });
       this.props.makeWarning('');
+
     } else {
       this.props.makeWarning(name + " should be a number");
     }
@@ -40,7 +41,7 @@ class DataInputComponent extends React.Component{
     data.append('Y', y);
     data.append('R', r);
 
-    fetch('http://localhost:8080/lab4/secure/add', {
+    fetch('http://localhost:8080/lab4/add', {
       method: 'POST',
       body: data,
       headers: {
@@ -49,9 +50,8 @@ class DataInputComponent extends React.Component{
       credentials: 'include'
     }).then(response => {
       if (response.ok) {
-        this.props.newDot();
-      } else {
-        this.props.makeWarning('ODZ!');
+        this.props.newDot(x, y, r, checkInArea(x, y, r));
+        this.props.makeWarning('');
       }
     }).catch(error => {
       this.props.makeWarning('There has been a problem with your fetch operation: ' + error.message);
@@ -63,7 +63,7 @@ class DataInputComponent extends React.Component{
       <div>
         <div className={'inputField'}>
           X
-          <select onChange={this.handleChange('x')}>
+          <select defaultValue={0} onChange={this.handleChange('x')}>
             <option value={'3'}>3</option>
             <option value={'2'}>2</option>
             <option value={'1'}>1</option>
@@ -78,12 +78,12 @@ class DataInputComponent extends React.Component{
 
         <div className={'inputField'}>
           Y
-          <input type={'text'} onChange={this.handleChange('y')}/>
+          <input type={'text'} defaultValue={ 0} onChange={this.handleChange('y')}/>
         </div>
 
         <div className={'inputField'}>
           R
-          <select onChange={this.changeR('r')}>
+          <select defaultValue={1} onChange={this.changeR('r')}>
             <option value={'5'}>5</option>
             <option value={'4'}>4</option>
             <option value={'3'}>3</option>
@@ -117,7 +117,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     makeWarning : bindActionCreators(makeWarning, dispatch),
     newDot: bindActionCreators(addDot, dispatch),
-    updateChart: bindActionCreators(updateChart, dispatch)
+    updateChart: bindActionCreators(updateChart, dispatch),
+    updateTable: bindActionCreators(updateTable, dispatch)
   }
 };
 

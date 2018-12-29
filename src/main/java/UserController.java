@@ -23,14 +23,20 @@ public class UserController {
                               @FormParam("password") String password,
                               @Context HttpServletRequest req) {
         User user = userService.findOne(login);
-        if (user != null && user.getPassword().equals(password)) {
+        if(user == null){
             req.getSession().setAttribute("login", login);
             return Response.status(Response.Status.OK)
-                    .entity("Logged in.")
+                    .entity("User doesn't exist")
+                    .build();
+        } else if( !user.getPassword().equals(password) ){
+            req.getSession().setAttribute("login", login);
+            return Response.status(Response.Status.OK)
+                    .entity("Incorrect password")
                     .build();
         } else {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("User doesn't exist.")
+            req.getSession().setAttribute("login", login);
+            return Response.status(Response.Status.OK)
+                    .entity("Well done!")
                     .build();
         }
     }
@@ -45,7 +51,7 @@ public class UserController {
         if (validateCredentials(login, password) && userService.findOne(login) == null) {
             userService.saveUser(user);
             req.getSession().setAttribute("login", login);
-            return Response.status(Response.Status.CREATED)
+            return Response.status(Response.Status.OK)
                     .entity("User was successfully registered.")
                     .build();
         } else {

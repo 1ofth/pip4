@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @Stateless
-@Path("/secure")
+@Path("/")
 public class PointController {
 
     @EJB
@@ -23,7 +23,7 @@ public class PointController {
     private UserService userService;
 
     @POST
-    @Path("/add")
+    @Path("add")
     public Response newPoint(@FormParam("X") double x, @FormParam("Y") double y ,
                              @FormParam("R") double r, @Context HttpServletRequest request ) {
         if (r < 0 || r > 5  || x < -2 || x > 2 || y < -3 || y > 5) {
@@ -40,7 +40,7 @@ public class PointController {
     }
 
     @GET
-    @Path("/getAll")
+    @Path("getAll")
     public Response getPoints(@Context HttpServletRequest request) {
         User user = userService.findOne((String)request.getSession().getAttribute("login"));
 

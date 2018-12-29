@@ -3,7 +3,11 @@ import {bindActionCreators} from "redux";
 import {addDot, makeWarning, updateChartFinished} from "../store/Actions";
 import connect from "react-redux/es/connect/connect";
 
-
+export function checkInArea(x, y, r) {
+  return (x <= r && y >= 0 && y <= r && x >= 0) || //square
+    (x <= r && y <= 0 && y >= x - r && x >= 0) || //triangle
+    (x <= 0 && y >= 0 && y <= Math.sqrt(r / 4 - x * x));
+}
 
 class Chart extends Component{
   constructor(props){
@@ -13,90 +17,132 @@ class Chart extends Component{
       width: 300,
       height: 300,
       r: 1,
-      dots: [],
+      dots: '',
       currentCoordinates: {xChart: 0, yChart: 0, x: 0, y: 0}
     };
 
+    this.updateDots();
+
+    console.log("!!");
     this.updateCanvas = this.updateCanvas.bind(this);
+
   }
 
   componentDidMount() {
     this.updateCanvas();
+
   }
   componentDidUpdate() {
     this.updateCanvas();
   }
 
+  // ret x=1.1 y=0
   getNormalizedCoordinates(x, y){
     return {
-      x: this.props.chartR*(x - 150)/150/0.87,
-      y: this.props.chartR*(y + 150)/150/0.87
+      x: this.props.chartR*(x)/150/0.87,
+      y: this.props.chartR*(y)/150/0.87
     }
   }
 
+  // ret x=-110 y=75
   getChartCoordinates(x, y){
     return{
-      x: Math.round(x/this.props.chartR*150*0.87+150),
-      y: Math.round(y/this.props.chartR*150*0.87-150)
+      x: Math.round(x/this.props.chartR*150*0.87),
+      y: Math.round(y/this.props.chartR*150*0.87)
     }
   }
 
-  // TODO check if it works
   handleClick = event => {
-    const {x, y} = this.getNormalizedCoordinates(event.pageX - this.refs.canvas.offsetLeft,
-      event.pageY - this.refs.canvas.offsetTop);
+    const x = event.nativeEvent.offsetX - 150;
+    const y =-event.nativeEvent.offsetY + 150;
+    const r = this.props.chartR;
+
+    const a = this.getNormalizedCoordinates(x,y);
+
+    if( a.x === undefined || a.y === undefined || r === undefined || a.x < -5 || a.x > 3 || a.y < -3 || a.y > 5 ||
+      r < 0 || r > 5){
+      this.props.makeWarning('Incorrect data');
+      return;
+    }
+
+    if(checkInArea(a.x, a.y, this.props.chartR)){
+      this.drawDot(event.nativeEvent.offsetX - 150, -event.nativeEvent.offsetY + 150, true);
+    } else {
+      this.drawDot(event.nativeEvent.offsetX - 150, -event.nativeEvent.offsetY + 150, false);
+    }
 
     let data = new URLSearchParams();
-    data.append('X', x);
-    data.append('Y', y);
+    data.append('X', a.x);
+    data.append('Y', a.y);
     data.append('R', this.props.chartR);
 
-    fetch('http://localhost:8080/lab4/secure/add', {
+    fetch('http://localhost:8080/lab4/add', {
       method: 'POST',
       body: data,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       credentials: 'include'
-    }).then(response => {
-      if (response.ok) {
-        this.props.newDot();
-      } else {
-        this.props.makeWarning('ODZ!');
-      }
     }).catch(error => {
       this.props.makeWarning('There has been a problem with your fetch operation: ' + error.message);
     });
   };
 
   updateCanvas(){
+    //this.updateDots();
     this.draw(this.props.chartR);
+    this.updateChart();
   }
 
-  // TODO this function is never called
+  updateChart(){
+    if(this.state.dots !== undefined && this.state.dots.length > 0) {
+      //console.log('chart is updating');
+      // console.log("pre:\n" + this.state.dots + '\n post:');
+      let text = this.state.dots
+        .substr(1, this.state.dots.length - 2)
+        .replace('\\', '')
+        .replace('\\n', '')
+        .split(", ");
+
+      //console.log("text was changed");
+
+      for (let i = 0; i < text.length; i++) {
+        //console.log(text[i]);
+        const obj = JSON.parse(text[i]);
+        const coord = this.getChartCoordinates(obj.x, obj.y);
+
+        //console.log("check if it should be drawn " + obj.r + "  " + this.props.chartR);
+        if((Number)(obj.r) === (Number)(this.props.chartR)) {
+          //console.log('drawning: ' + obj.x + ":" + obj.y + " " + obj.r);
+          this.drawDot(coord.x, coord.y, obj.inArea);
+        }
+      }
+    }
+  }
+
   updateDots(){
-    fetch('http://localhost:8080/lab4/secure/getAll', {
+    fetch('http://localhost:8080/lab4/getAll', {
       method: 'GET',
       withCredentials: true
-    }).then((res) => {
+    }).then( (response) => {
+      return response.text()
+    }).then( (res) => {
         this.setState({
-          dots: res.data
+          dots : res
         });
-      this.drawDots();
-      }
-    ).catch(function (error) {
+        }
+      ).catch(function (error) {
       if (error === undefined || error.response === undefined) {
-        this.props.history.push('/ss');
+        this.props.makeWarning("oi...");
       }
     });
   }
 
-  // TODO
-  drawDots(){
-
+  addDot(){
+    const coord = this.getChartCoordinates(this.props.newDot.x, this.props.newDot.y);
+    this.drawDot(coord.x, coord.y, this.props.inArea);
   }
 
-  // TODO
   drawDot(x, y, isArea){
     let canvas = this.refs.canvas;
     let ctx = canvas.getContext("2d");
@@ -109,7 +155,10 @@ class Chart extends Component{
       ctx.fillStyle = 'blue';
     }
 
-
+    ctx.beginPath();
+    ctx.arc(150+x,150-y, 2, 0, 2*Math.PI);
+    ctx.fill();
+    ctx.closePath();
   }
 
   draw(r){
@@ -220,10 +269,18 @@ class Chart extends Component{
     ctx.stroke();
   }
 
+  handleUpdate(){
+    this.updateDots();
+    this.updateChart();
+    this.props.updateChartFinished();
+  }
+
   render(){
     return(
       <div>
-        {this.props.updateChart !== undefined && this.props.updateChart === true ? this.updateCanvas() : ''}
+        {this.props.updateChart === true && this.props.newDot !== undefined
+          ? this.handleUpdate()
+          : ''}
         <canvas ref="canvas" width={this.state.width} onClick={this.handleClick} height={this.state.height}/>
       </div>
     )
@@ -234,7 +291,9 @@ const mapStateToProps = (state) => {
   return {
     chartR: state.chartR,
     warning: state.message,
-    updateChart: state.updateChart
+    updateChart: state.updateChart,
+    updateTable: state.updateTable,
+    newDot: state.newDot
   };
 };
 

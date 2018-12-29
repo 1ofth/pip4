@@ -29,7 +29,7 @@ export default function MainReducer(state = initialState, action) {
       return { ...state, message: 'Registration failed'};
 
     case DOT_ADDED:
-      return { ...state, updateTable: true};
+      return { ...state, updateTable: true, updateChart: true, newDot: action.payload};
 
     case DOTS_LOADED:
       return { ...state, updateTable: false};

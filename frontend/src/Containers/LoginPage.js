@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from "../components/Header";
-import Links from "../components/Links";
 import LoginComponent from "../components/LoginComponent";
+import WarningComponent from "../components/WarningComponent";
 
 
 export default class LoginPage extends React.Component{
@@ -26,8 +26,7 @@ export default class LoginPage extends React.Component{
               </div>
 
               <LoginComponent/>
-
-              <Links/>
+              <WarningComponent/>
             </div>
           }
         </div>

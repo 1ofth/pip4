@@ -8,12 +8,27 @@ class TableComponent extends React.Component{
     super(props);
 
     this.state={
-      dots: [
-        {x: 0, y: 0, r: 1, inArea: true},
-        {x: 1, y: 0, r: 1, inArea: true}
-      ]
+      dots: [],
+      text: ''
     }
   }
+
+  updateTable(){
+    if(this.state.text !== undefined && this.state.text.length > 0) {
+      console.log('table is updating');
+      // console.log("pre:\n" + this.state.dots + '\n post:');
+      let text = this.state.text
+        .substr(1, this.state.text.length - 2)
+        .replace('\\', '')
+        .replace('\\n', '')
+        .split(", ");
+
+      for (let i = 0; i < text.length; i++) {
+        const obj = JSON.parse(text[i]);
+      }
+    }
+  }
+
 
   render(){
 
@@ -25,7 +40,7 @@ class TableComponent extends React.Component{
       <div>
         <table id={'table'}>
           <tbody>
-            <tr><td>x</td><td>y</td><td>r</td><td>result</td></tr>
+            <tr id={'tableTitle'}><td>x</td><td>y</td><td>r</td><td>result</td></tr>
             {list}
           </tbody>
         </table>

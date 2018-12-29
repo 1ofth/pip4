@@ -30,15 +30,22 @@ export function registered(login) {
     }
 }
 
-export function addDot(){
+export function addDot(x, y, r, inArea){
   return{
-    type: DOT_ADDED
+    type: DOT_ADDED,
+    payload: {x, y, r, inArea}
   }
 }
 
 export function tableUpdated() {
   return{
     type: DOTS_LOADED
+  }
+}
+
+export function updateTable() {
+  return{
+    type: DOT_ADDED
   }
 }
 

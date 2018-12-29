@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import {
   makeWarning, registered
 } from '../store/Actions';
+import {checkInArea} from "./Chart";
 
 
 class RegisterComponent extends React.Component{
@@ -55,6 +56,23 @@ class RegisterComponent extends React.Component{
     }).catch(error => {
       this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
     });
+
+    data = new URLSearchParams();
+    data.append('X', 0);
+    data.append('Y', 0);
+    data.append('R', 5);
+
+    fetch('http://localhost:8080/lab4/add', {
+      method: 'POST',
+      body: data,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      credentials: 'include'
+    }).catch(error => {
+      this.props.makeWarning('There has been a problem with your fetch operation: ' + error.message);
+    });
+
   };
 
   render(){

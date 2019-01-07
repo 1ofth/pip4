@@ -1,12 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-import history from '../History';
-
-import {
-  makeWarning, registered
-} from '../store/Actions';
+import {makeWarning, registered} from '../store/Actions';
 
 class RegisterComponent extends React.Component{
   constructor(props){
@@ -29,27 +25,7 @@ class RegisterComponent extends React.Component{
 
   // TODO make it work!
   registerUser = (login, password) => event => {
-
-    let data = new URLSearchParams();
-    data.append('login', login);
-    data.append('password', password);
-
-    fetch('http://localhost:8080/lab4/registration', {
-      method: 'POST',
-      body: data,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      credentials: 'include'
-    }).then(response => {
-      if (response.ok) {
-        console.log("!");
-        this.props.registered(login);
-        history.push('main');
-      }
-    }).catch(error => {
-        this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
-    });
+    console.log('register');
   };
 
   render(){

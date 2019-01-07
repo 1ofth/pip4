@@ -1,4 +1,5 @@
 export const INITIAL_STATE = 'INITIAL_STATE';
+
 export const initialState = {
   type: INITIAL_STATE,
   login: '',

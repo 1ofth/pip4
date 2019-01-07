@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 
 import './styles/common.css';
 
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import {applyMiddleware, createStore} from 'redux';
+import {Provider} from 'react-redux';
 
-import { Router, Route, Switch } from 'react-router-dom';
+import {Route, Router, Switch} from 'react-router-dom';
 
 import MainReducer from "./store/MainReducer";
 import history from './History';
@@ -15,7 +15,10 @@ import RegisterPage from './Containers/RegisterPage';
 import MainPage from './Containers/MainPage';
 import NotFoundPage from './Containers/NotFoundPage';
 import {PrivateRoute} from "./PrivateRoute";
-const store = createStore(MainReducer);
+import thunk from 'redux-thunk'
+import {initialState} from "./store/States";
+
+const store = createStore(MainReducer, initialState, applyMiddleware(thunk));
 
 
 

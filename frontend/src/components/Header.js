@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {logout, makeWarning} from "../store/Actions";
 import history from '../History';
@@ -34,7 +34,7 @@ class Header extends React.Component{
                   : '  Anonymous'
               }
                 </td>
-                <td id={'spacer'}></td>
+                <td id={'spacer'}/>
                 <td>
                   <input id={'logoutButton'}
                     type="button"

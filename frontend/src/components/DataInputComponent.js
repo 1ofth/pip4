@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {addDot, makeWarning, updateChart} from "../store/Actions";
 
@@ -35,27 +35,7 @@ class DataInputComponent extends React.Component{
   };
 
   checkDot = (x, y, r) => event => {
-    let data = new URLSearchParams();
-    data.append('X', x);
-    data.append('Y', y);
-    data.append('R', r);
-
-    fetch('http://localhost:8080/lab4/secure/add', {
-      method: 'POST',
-      body: data,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      credentials: 'include'
-    }).then(response => {
-      if (response.ok) {
-        this.props.newDot();
-      } else {
-        this.props.makeWarning('ODZ!');
-      }
-    }).catch(error => {
-      this.props.makeWarning('There has been a problem with your fetch operation: ' + error.message);
-    });
+    console.log('check dot');
   };
 
   render(){

@@ -3,9 +3,25 @@ import {bindActionCreators} from "redux";
 import {addDot, makeWarning, updateChartFinished} from "../store/Actions";
 import connect from "react-redux/es/connect/connect";
 
-
-
 class Chart extends Component{
+  // TODO check if it works
+  handleClick = event => {
+    const x = event.nativeEvent.offsetX - 150;
+    const y = -event.nativeEvent.offsetY + 150;
+    const c = this.getNormalizedCoordinates(x, y);
+
+    console.log(x, y);
+    console.log(c.x, c.y);
+  };
+
+  componentDidMount() {
+    this.updateCanvas();
+  }
+
+  componentDidUpdate() {
+    this.updateCanvas();
+  }
+
   constructor(props){
     super(props);
 
@@ -13,87 +29,35 @@ class Chart extends Component{
       width: 300,
       height: 300,
       r: 1,
-      dots: [],
-      currentCoordinates: {xChart: 0, yChart: 0, x: 0, y: 0}
+      dots: []
     };
 
     this.updateCanvas = this.updateCanvas.bind(this);
   }
 
-  componentDidMount() {
-    this.updateCanvas();
-  }
-  componentDidUpdate() {
-    this.updateCanvas();
-  }
-
+  // ret x=1.1 y=0
   getNormalizedCoordinates(x, y){
     return {
-      x: this.props.chartR*(x - 150)/150/0.87,
-      y: this.props.chartR*(y + 150)/150/0.87
+      x: this.props.chartR * (x) / 150 / 0.87,
+      y: this.props.chartR * (y) / 150 / 0.87
     }
   }
 
+  // ret x=-110 y=75
   getChartCoordinates(x, y){
     return{
-      x: Math.round(x/this.props.chartR*150*0.87+150),
-      y: Math.round(y/this.props.chartR*150*0.87-150)
+      x: Math.round(x / this.props.chartR * 150 * 0.87),
+      y: Math.round(y / this.props.chartR * 150 * 0.87)
     }
   }
 
-  // TODO check if it works
-  handleClick = event => {
-    const {x, y} = this.getNormalizedCoordinates(event.pageX - this.refs.canvas.offsetLeft,
-      event.pageY - this.refs.canvas.offsetTop);
-
-    let data = new URLSearchParams();
-    data.append('X', x);
-    data.append('Y', y);
-    data.append('R', this.props.chartR);
-
-    fetch('http://localhost:8080/lab4/secure/add', {
-      method: 'POST',
-      body: data,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      credentials: 'include'
-    }).then(response => {
-      if (response.ok) {
-        this.props.newDot();
-      } else {
-        this.props.makeWarning('ODZ!');
-      }
-    }).catch(error => {
-      this.props.makeWarning('There has been a problem with your fetch operation: ' + error.message);
-    });
-  };
-
   updateCanvas(){
-    this.draw(this.props.chartR);
+    console.log('update canvas');
   }
 
   // TODO this function is never called
   updateDots(){
-    fetch('http://localhost:8080/lab4/secure/getAll', {
-      method: 'GET',
-      withCredentials: true
-    }).then((res) => {
-        this.setState({
-          dots: res.data
-        });
-      this.drawDots();
-      }
-    ).catch(function (error) {
-      if (error === undefined || error.response === undefined) {
-        this.props.history.push('/ss');
-      }
-    });
-  }
-
-  // TODO
-  drawDots(){
-
+    console.log('update dots');
   }
 
   // TODO
@@ -108,8 +72,6 @@ class Chart extends Component{
       ctx.strokeStyle = 'blue';
       ctx.fillStyle = 'blue';
     }
-
-
   }
 
   draw(r){

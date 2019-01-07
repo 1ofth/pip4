@@ -8,7 +8,7 @@ import {Provider} from 'react-redux';
 
 import {Route, Router, Switch} from 'react-router-dom';
 
-import MainReducer from "./store/MainReducer";
+import MainReducer from "./store/Reducers/MainReducer";
 import history from './History';
 import LoginPage from "./Containers/LoginPage";
 import RegisterPage from './Containers/RegisterPage';
@@ -17,10 +17,10 @@ import NotFoundPage from './Containers/NotFoundPage';
 import {PrivateRoute} from "./PrivateRoute";
 import thunk from 'redux-thunk'
 import {initialState} from "./store/States";
+import {createLogger} from 'redux-logger'
 
-const store = createStore(MainReducer, initialState, applyMiddleware(thunk));
-
-
+const logger = createLogger();
+const store = createStore(MainReducer, initialState, applyMiddleware(thunk, logger));
 
 export const path = '/lab4/';
 

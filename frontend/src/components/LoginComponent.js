@@ -1,13 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-import history from '../History';
-
-import {
-  login,
-  makeWarning
-} from '../store/Actions';
+import {login, makeWarning} from '../store/Actions';
 
 class LoginComponent extends React.Component{
   constructor(props){
@@ -29,40 +24,11 @@ class LoginComponent extends React.Component{
 
   // TODO make it work!
   loginUser = (login, password) => event => {
-    window.sessionStorage.setItem('isAuthorised', 'true');
-    window.sessionStorage.setItem('login', login);
-    this.props.loginU(login);
-    history.push('main');
-
-    let data = new URLSearchParams();
-    data.append('login', login);
-    data.append('password', password);
-
-    fetch('http://localhost:8080/lab4/login', {
-      method: 'POST',
-      body: data,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      credentials: 'include'
-
-    }).then(response => {
-      if (response.ok) {
-        // redirect to main page
-        window.sessionStorage.setItem('isAuthorised', 'true');
-        window.sessionStorage.setItem('login', login);
-        this.props.loginU(login);
-        history.push('main');
-      }
-
-    }).catch(error => {
-      this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
-    });
+    this.props.loginU(login, password);
   };
 
   render(){
     return (
-
         <table className={'inputs'}>
           <tr>
             <td>Login</td>
@@ -78,7 +44,7 @@ class LoginComponent extends React.Component{
             <td>Password</td>
             <td>
               <input
-                type='text'
+                type='password'
                 onChange={this.handleChange('password')}
               />
             </td>
@@ -92,12 +58,6 @@ class LoginComponent extends React.Component{
                 value='Login'
                 onClick={this.loginUser(this.state.login, this.state.password)}
               />
-            </td>
-          </tr>
-
-          <tr >
-            <td colSpan={2}>
-              {this.props.warning}
             </td>
           </tr>
         </table>

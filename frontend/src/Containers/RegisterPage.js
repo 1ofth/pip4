@@ -6,10 +6,14 @@ import Links from "../components/Links";
 export default class LoginPage extends React.Component{
   render(){
     return (
-      <div style={{background: 'yellow'}}>
-        <Header/>
-        <RegisterComponent/>
-        <Links/>
+      <div className={'container'}>
+        <div></div>
+
+        <div>
+          <Header/>
+          <RegisterComponent/>
+          <Links/>
+        </div>
       </div>
     );
   }

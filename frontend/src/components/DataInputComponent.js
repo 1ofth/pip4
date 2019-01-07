@@ -15,12 +15,13 @@ class DataInputComponent extends React.Component{
   }
 
   handleChange = name => event => {
-
     if(!isNaN(parseFloat((String)(event.target.value).replace(',', '.')))) {
       this.setState({
         [name]: (String)(event.target.value).replace(',', '.'),
       });
-      this.props.makeWarning('');
+      if (this.props.warning !== '') {
+        this.props.makeWarning('');
+      }
     } else {
       this.props.makeWarning(name + " should be a number");
     }
@@ -38,6 +39,14 @@ class DataInputComponent extends React.Component{
     console.log('check dot');
   };
 
+  createOptions() {
+    let result = [];
+    for (let i = 5; i > 0; i--) {
+      result.push(<option selected={this.props.chartR === i} value={(String)(i)}>{i}</option>);
+    }
+    return result;
+  }
+
   render(){
     return (
       <div>
@@ -47,7 +56,7 @@ class DataInputComponent extends React.Component{
             <option value={'3'}>3</option>
             <option value={'2'}>2</option>
             <option value={'1'}>1</option>
-            <option value={'0'}>0</option>
+            <option selected={true} value={'0'}>0</option>
             <option value={'-1'}>-1</option>
             <option value={'-2'}>-2</option>
             <option value={'-3'}>-3</option>
@@ -58,17 +67,13 @@ class DataInputComponent extends React.Component{
 
         <div className={'inputField'}>
           Y
-          <input type={'text'} onChange={this.handleChange('y')}/>
+          <input type={'text'} value={this.state.y} onChange={this.handleChange('y')}/>
         </div>
 
         <div className={'inputField'}>
           R
           <select onChange={this.changeR('r')}>
-            <option value={'5'}>5</option>
-            <option value={'4'}>4</option>
-            <option value={'3'}>3</option>
-            <option value={'2'}>2</option>
-            <option value={'1'}>1</option>
+            {this.createOptions()}
           </select>
         </div>
 

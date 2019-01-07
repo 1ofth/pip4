@@ -4,24 +4,6 @@ import {addDot, makeWarning, updateChartFinished} from "../store/Actions";
 import connect from "react-redux/es/connect/connect";
 
 class Chart extends Component{
-  // TODO check if it works
-  handleClick = event => {
-    const x = event.nativeEvent.offsetX - 150;
-    const y = -event.nativeEvent.offsetY + 150;
-    const c = this.getNormalizedCoordinates(x, y);
-
-    console.log(x, y);
-    console.log(c.x, c.y);
-  };
-
-  componentDidMount() {
-    this.updateCanvas();
-  }
-
-  componentDidUpdate() {
-    this.updateCanvas();
-  }
-
   constructor(props){
     super(props);
 
@@ -33,6 +15,22 @@ class Chart extends Component{
     };
 
     this.updateCanvas = this.updateCanvas.bind(this);
+  }
+
+
+  handleClick = event => {
+    const x = event.nativeEvent.offsetX - 150;
+    const y = -event.nativeEvent.offsetY + 150;
+    const c = this.getNormalizedCoordinates(x, y);
+
+  };
+
+  componentDidMount() {
+    this.updateCanvas();
+  }
+
+  componentDidUpdate() {
+    this.updateCanvas();
   }
 
   // ret x=1.1 y=0
@@ -52,15 +50,15 @@ class Chart extends Component{
   }
 
   updateCanvas(){
-    console.log('update canvas');
+    this.draw(this.props.chartR);
+
+    this.props.updateChartFinished();
   }
 
-  // TODO this function is never called
   updateDots(){
-    console.log('update dots');
+
   }
 
-  // TODO
   drawDot(x, y, isArea){
     let canvas = this.refs.canvas;
     let ctx = canvas.getContext("2d");

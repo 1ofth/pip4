@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {addDot, makeWarning, updateChart} from "../store/Actions";
 
@@ -16,9 +16,17 @@ class TableComponent extends React.Component{
   }
 
   render(){
-
+    console.log(this.props.chartR);
     const list = this.state.dots.map((item, index) => {
-      return <tr key={index}><td>{item.x}</td><td>{item.y}</td><td>{item.r}</td><td>{(String)(item.inArea)}</td></tr>;
+      console.log(item.r);
+      if (item.r === this.props.chartR) {
+        return <tr key={index}>
+          <td>{item.x}</td>
+          <td>{item.y}</td>
+          <td>{item.r}</td>
+          <td>{(String)(item.inArea)}</td>
+        </tr>;
+      }
     });
 
     return(

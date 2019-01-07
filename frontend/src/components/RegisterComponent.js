@@ -30,7 +30,7 @@ class RegisterComponent extends React.Component{
 
   render(){
     return (
-      <div className={'userDataBlock'}>
+      <div className={'inputs'}>
         <div>
           <input
             type='text'
@@ -70,7 +70,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     makeWarning : bindActionCreators(makeWarning, dispatch),
-      registered: bindActionCreators(registered, dispatch)
+    ///registered: bindActionCreators(registered, dispatch)
   }
 };
 

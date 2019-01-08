@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {makeWarning, registered} from '../store/Actions';
+import {makeWarning, register, registered} from '../store/Actions';
 
 class RegisterComponent extends React.Component{
   constructor(props){
@@ -25,7 +25,7 @@ class RegisterComponent extends React.Component{
 
   // TODO make it work!
   registerUser = (login, password) => event => {
-    console.log('register');
+    this.props.register(login, password);
   };
 
   render(){
@@ -41,13 +41,11 @@ class RegisterComponent extends React.Component{
 
         <div>
           <input
-            type='text'
+            type='password'
             value = {this.props.password}
             onChange={this.handleChange('password')}
           />
         </div>
-
-        <div>{this.props.warning}</div>
 
         <div>
           <input
@@ -63,14 +61,13 @@ class RegisterComponent extends React.Component{
 
 const mapStateToProps = (state) => {
   return {
-    warning: state.message
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     makeWarning : bindActionCreators(makeWarning, dispatch),
-    ///registered: bindActionCreators(registered, dispatch)
+    register: bindActionCreators(register, dispatch)
   }
 };
 

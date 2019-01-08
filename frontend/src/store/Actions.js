@@ -4,11 +4,14 @@ import {
   LOGIN_FAILED,
   LOGIN_SACCEED,
   LOGOUT,
+  REGISTRATION_COMPLETED,
+  REGISTRATION_FAILED,
   UPDATE_CHART,
   UPDATE_CHART_FINISHED,
   WARNING
 } from "./States";
 import history from "../History";
+import {MAIN_PAGE} from "../Views";
 
 export function makeWarning(message) {
   return{
@@ -36,7 +39,7 @@ export function login(login, password) {
         if (response.ok) {
           window.sessionStorage.setItem('isAuthorised', 'true');
           window.sessionStorage.setItem('login', login);
-          history.push('main');
+          history.push(MAIN_PAGE);
 
           dispatch({
             type: LOGIN_SACCEED,
@@ -67,9 +70,22 @@ export function logout() {
   }
 }
 
-/*
+
 export function register(login, password) {
   return (dispatch) => {
+    if ((String)(login).length < 5) {
+      dispatch({
+        type: WARNING,
+        payload: 'Login is too short. It should have at least 5 symbols'
+      });
+      return;
+    } else if ((String)(password).length < 4) {
+      dispatch({
+        type: WARNING,
+        payload: 'Password is too short. It should have at least 4 symbols'
+      });
+      return;
+    }
 
     let data = new URLSearchParams();
     data.append('login', login);
@@ -84,24 +100,31 @@ export function register(login, password) {
       credentials: 'include'
     })
       .then(response => {
-      if (response.ok) {
+        if (response.ok) {
+          window.sessionStorage.setItem('isAuthorised', 'true');
+          window.sessionStorage.setItem('login', login);
 
-        this.props.registered(login);
-        window.sessionStorage.setItem('isAuthorised', 'true');
-        window.sessionStorage.setItem('login', login);
-        this.props.makeWarning('');
-        history.push('main');
-      }
-    })
+          history.push(MAIN_PAGE);
+
+          dispatch({
+            type: REGISTRATION_COMPLETED,
+            payload: login
+          });
+        } else {
+          dispatch({
+            type: REGISTRATION_FAILED
+          });
+        }
+      })
       .catch(error => {
-      this.props.makeWarning('There has been a problem with your fetch operation: ', error.message);
-    });
-    return {
-      type: REGISTRATION_COMPLETED,
-      payload: login
-    }
+        dispatch({
+          type: WARNING,
+          payload: 'There has been a problem while logging: ' + error.message
+        });
+      });
+
   };
-}*/
+}
 
 export function addDot(){
   return{

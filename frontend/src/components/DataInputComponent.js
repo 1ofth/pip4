@@ -42,7 +42,7 @@ class DataInputComponent extends React.Component{
   createOptions() {
     let result = [];
     for (let i = 5; i > 0; i--) {
-      result.push(<option selected={this.props.chartR === i} value={(String)(i)}>{i}</option>);
+      result.push(<option selected={this.props.chartR == i} value={(String)(i)}>{i}</option>);
     }
     return result;
   }

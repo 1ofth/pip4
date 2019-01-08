@@ -16,9 +16,7 @@ class TableComponent extends React.Component{
   }
 
   render(){
-    console.log(this.props.chartR);
     const list = this.state.dots.map((item, index) => {
-      console.log(item.r);
       if (item.r === this.props.chartR) {
         return <tr key={index}>
           <td>{item.x}</td>

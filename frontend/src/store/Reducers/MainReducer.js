@@ -1,4 +1,6 @@
 import {
+  DOT_ADDED,
+  DOTS_LOADED,
   initialState,
   LOGIN_SACCEED,
   LOGOUT,
@@ -33,6 +35,29 @@ export default function MainReducer(state = initialState, action) {
 
     case REGISTRATION_COMPLETED:
       return {...state, message: '', login: action.payload};
+
+
+    case DOT_ADDED: {
+      let temp = [];
+      if (state.dots !== undefined) {
+        temp = state.dots;
+      }
+
+      temp.push(action.payload);
+
+      return {...state, message: '', updateChart: true, dots: temp};
+    }
+
+    case DOTS_LOADED: {
+      let temp = [];
+      if (state.dots !== undefined) {
+        temp = state.dots;
+      }
+
+      temp.concat(action.payload);
+
+      return {...state, message: '', dots: temp};
+    }
 
 
     default:

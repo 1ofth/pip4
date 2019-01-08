@@ -36,7 +36,7 @@ class DataInputComponent extends React.Component{
   };
 
   checkDot = (x, y, r) => event => {
-    console.log('check dot');
+    this.props.addDot(x, y, r);
   };
 
   createOptions() {
@@ -101,7 +101,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     makeWarning : bindActionCreators(makeWarning, dispatch),
-    newDot: bindActionCreators(addDot, dispatch),
+    addDot: bindActionCreators(addDot, dispatch),
     updateChart: bindActionCreators(updateChart, dispatch)
   }
 };

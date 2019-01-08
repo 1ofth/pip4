@@ -1,4 +1,5 @@
 import {
+  DOT_ADDED,
   DOTS_LOADED,
   LOGIN_FAILED,
   LOGIN_SACCEED,
@@ -117,7 +118,7 @@ export function register(login, password) {
       .catch(error => {
         dispatch({
           type: WARNING,
-          payload: 'There has been a problem while logging: ' + error.message
+          payload: 'There has been a problem while fetching: ' + error.message
         });
       });
 
@@ -125,13 +126,13 @@ export function register(login, password) {
 }
 
 export function addDot(x, y, r) {
-  /*return (dispatch) => {
+  return (dispatch) => {
     let data = new URLSearchParams();
     data.append('X', x);
     data.append('Y', y);
     data.append('R', r);
 
-    fetch('http://localhost:8080/lab4/add', {
+    fetch('http://localhost:8080/lab4/secure/add', {
       method: 'POST',
       body: data,
       headers: {
@@ -141,29 +142,50 @@ export function addDot(x, y, r) {
     })
       .then(response => {
         if (response.ok) {
-          window.sessionStorage.setItem('isAuthorised', 'true');
-          window.sessionStorage.setItem('login', login);
-
-          history.push(MAIN_PAGE);
-
           dispatch({
-            type: REGISTRATION_COMPLETED,
-            payload: login
+            type: DOT_ADDED,
+            payload: {x, y, r}
           });
         } else {
           dispatch({
-            type: REGISTRATION_FAILED
+            type: WARNING,
+            payload: 'You should check \'x\' and \'y\' values to be correct ( -5 <= x <= 3, -3 < y < 5 )'
           });
         }
       })
       .catch(error => {
         dispatch({
           type: WARNING,
-          payload: 'There has been a problem while logging: ' + error.message
+          payload: 'There has been a problem while fetching: ' + error.message
         });
       });
-  }*/
+  }
 }
+
+export function loadDots() {
+  return (dispatch) => {
+    fetch('http://localhost:8080/lab4/secure/getAll', {
+      method: 'GET',
+      withCredentials: true
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((response) => {
+        dispatch({
+          type: DOTS_LOADED,
+          payload: response
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: WARNING,
+          payload: 'There has been a problem while fetching: ' + error.message
+        });
+      });
+  }
+}
+
 
 export function tableUpdated() {
   return{

@@ -1,29 +1,28 @@
 import React, {Component} from 'react'
 import {bindActionCreators} from "redux";
-import {addDot, makeWarning, updateChartFinished} from "../store/Actions";
+import {addDot, loadDots, makeWarning, updateChartFinished} from "../store/Actions";
 import connect from "react-redux/es/connect/connect";
 
 class Chart extends Component{
-  constructor(props){
-    super(props);
-
-    this.state = {
-      width: 300,
-      height: 300,
-      r: 1,
-      dots: []
-    };
-
-    this.updateCanvas = this.updateCanvas.bind(this);
-  }
-
-
   handleClick = event => {
     const x = event.nativeEvent.offsetX - 150;
     const y = -event.nativeEvent.offsetY + 150;
     const c = this.getNormalizedCoordinates(x, y);
 
+    this.props.addDot(c.x, c.y, this.props.chartR);
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      width: 300,
+      height: 300,
+      r: 1
+    };
+
+    this.updateCanvas = this.updateCanvas.bind(this);
+  }
 
   componentDidMount() {
     this.updateCanvas();
@@ -44,24 +43,42 @@ class Chart extends Component{
   // ret x=-110 y=75
   getChartCoordinates(x, y){
     return{
-      x: Math.round(x / this.props.chartR * 150 * 0.87),
-      y: Math.round(y / this.props.chartR * 150 * 0.87)
+      x: 150 + Math.round(x / this.props.chartR * 150 * 0.87),
+      y: 150 - Math.round(y / this.props.chartR * 150 * 0.87)
     }
   }
 
   updateCanvas(){
     this.draw(this.props.chartR);
 
+    for (let i = 0; i < this.props.dots.length; i++) {
+      const dot = this.props.dots[i];
+
+      if (dot.r === this.props.chartR) {
+
+
+        this.drawDot(dot.x, dot.y);
+      }
+    }
+
     this.props.updateChartFinished();
-  }
-
-  updateDots(){
 
   }
 
-  drawDot(x, y, isArea){
+  drawDot(x, y) {
     let canvas = this.refs.canvas;
     let ctx = canvas.getContext("2d");
+
+    let isArea = false;
+    const r = this.props.chartR;
+
+    if (y >= 0 && y <= r && x >= 0 && x <= r ||      // rect
+      y >= 0 && x <= 0 && y * y <= (r * r / 4 - x * x) ||  // segment
+      y <= 0 && x >= 0 && y >= x - r) {             // triangle
+      isArea = true;
+    }
+
+    const c = this.getChartCoordinates(x, y);
 
     if(isArea === true){
       ctx.strokeStyle = 'red';
@@ -70,6 +87,12 @@ class Chart extends Component{
       ctx.strokeStyle = 'blue';
       ctx.fillStyle = 'blue';
     }
+
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, 3, 0, Math.PI * 2, false);
+    ctx.fill();
+    ctx.closePath();
+    ctx.stroke();
   }
 
   draw(r){
@@ -194,15 +217,17 @@ const mapStateToProps = (state) => {
   return {
     chartR: state.chartR,
     warning: state.message,
-    updateChart: state.updateChart
+    updateChart: state.updateChart,
+    dots: state.dots
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     makeWarning : bindActionCreators(makeWarning, dispatch),
-    newDot: bindActionCreators(addDot, dispatch),
-    updateChartFinished: bindActionCreators(updateChartFinished, dispatch)
+    addDot: bindActionCreators(addDot, dispatch),
+    updateChartFinished: bindActionCreators(updateChartFinished, dispatch),
+    loadDots: bindActionCreators(loadDots, dispatch)
   }
 };
 

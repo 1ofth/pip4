@@ -4,7 +4,8 @@ export const initialState = {
   type: INITIAL_STATE,
   login: '',
   message: '',
-  chartR: 1
+  chartR: 1,
+  dots: []
 };
 
 // for login

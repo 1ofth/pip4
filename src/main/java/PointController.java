@@ -1,17 +1,12 @@
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.*;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.List;
 
 @Stateless
 @Path("/secure")
@@ -26,7 +21,7 @@ public class PointController {
     @Path("/add")
     public Response newPoint(@FormParam("X") double x, @FormParam("Y") double y ,
                              @FormParam("R") double r, @Context HttpServletRequest request ) {
-        if (r < 0 || r > 5  || x < -2 || x > 2 || y < -3 || y > 5) {
+        if (r < 0 || r > 5 || x < -5 || x > 3 || y < -3 || y > 5) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Incorrect input data")
                     .build();
@@ -56,10 +51,7 @@ public class PointController {
         if(x>=0 && y>=0 && y<=r && x<=r ){
             return true;
         }
-        if(x<=0 && y>=0 && y*y + x*x <= (r/2)*(r/2)){
-            return true;
-        }
-        return false;
+        return x <= 0 && y >= 0 && y * y + x * x <= (r / 2) * (r / 2);
     }
 
 }

@@ -1,5 +1,4 @@
 import {
-  DOT_ADDED,
   DOTS_LOADED,
   LOGIN_FAILED,
   LOGIN_SACCEED,
@@ -70,7 +69,6 @@ export function logout() {
   }
 }
 
-
 export function register(login, password) {
   return (dispatch) => {
     if ((String)(login).length < 5) {
@@ -126,10 +124,45 @@ export function register(login, password) {
   };
 }
 
-export function addDot(){
-  return{
-    type: DOT_ADDED
-  }
+export function addDot(x, y, r) {
+  /*return (dispatch) => {
+    let data = new URLSearchParams();
+    data.append('X', x);
+    data.append('Y', y);
+    data.append('R', r);
+
+    fetch('http://localhost:8080/lab4/add', {
+      method: 'POST',
+      body: data,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      credentials: 'include'
+    })
+      .then(response => {
+        if (response.ok) {
+          window.sessionStorage.setItem('isAuthorised', 'true');
+          window.sessionStorage.setItem('login', login);
+
+          history.push(MAIN_PAGE);
+
+          dispatch({
+            type: REGISTRATION_COMPLETED,
+            payload: login
+          });
+        } else {
+          dispatch({
+            type: REGISTRATION_FAILED
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: WARNING,
+          payload: 'There has been a problem while logging: ' + error.message
+        });
+      });
+  }*/
 }
 
 export function tableUpdated() {

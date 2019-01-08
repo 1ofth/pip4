@@ -12,7 +12,7 @@ export default class LoginPage extends React.Component{
         <div></div>
 
         <div>
-          <Header/>
+          <Header title={'Login page'}/>
 
           {window.sessionStorage.getItem('isAuthorised') === 'true'
             ?

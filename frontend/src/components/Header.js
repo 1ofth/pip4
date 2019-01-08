@@ -5,6 +5,16 @@ import {logout, makeWarning} from "../store/Actions";
 import history from '../History';
 
 class Header extends React.Component{
+  constructor(props) {
+    super(props);
+
+    if (this.props.title !== undefined) {
+      document.title = this.props.title;
+    } else {
+      document.title = 'PIP_L4';
+    }
+  }
+
   logOut = () => event => {
     this.props.logout();
     window.sessionStorage.setItem('isAuthorised', 'false');

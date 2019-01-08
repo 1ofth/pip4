@@ -11,10 +11,21 @@ export default class LoginPage extends React.Component{
         <div></div>
 
         <div>
-          <Header/>
-          <RegisterComponent/>
-          <WarningComponent/>
-          <Links/>
+          <Header title={'Register page'}/>
+          {
+            window.sessionStorage.getItem('isAuthorised') === 'true'
+              ?
+              <div className={'warning'}>
+                To register, please, log out.
+              </div>
+              :
+              <div>
+                <RegisterComponent/>
+                <WarningComponent/>
+                <Links/>
+              </div>
+          }
+          }
         </div>
       </div>
     );

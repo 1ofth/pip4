@@ -6,7 +6,7 @@ export default class LoginPage extends React.Component{
   render(){
     return (
       <div style={{background: 'yellow'}}>
-        <Header/>
+        <Header title={'Not found :('}/>
         Not found
         <Links/>
       </div>

@@ -1,6 +1,6 @@
 import {initialState} from "../States";
 
-export default function UserReducer(state = initialState, action) {
+export default function MainReducer(state = initialState, action) {
   switch (action.type) {
 
 

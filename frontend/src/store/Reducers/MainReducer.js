@@ -14,11 +14,13 @@ export default function MainReducer(state = initialState, action) {
     case WARNING:
       return {...state, message: action.payload};
 
+
     case UPDATE_CHART:
       return {...state, chartR: action.payload, updateChart: true};
 
     case UPDATE_CHART_FINISHED:
       return {...state, updateChart: false};
+
 
     case LOGOUT:
       return {...state, message: '', login: ''};

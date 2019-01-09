@@ -4,17 +4,10 @@ import {bindActionCreators} from "redux";
 import {addDot, makeWarning, updateChart} from "../store/Actions";
 
 class DataInputComponent extends React.Component{
-  constructor(props){
-    super(props);
-
-    this.state = {
-      x: 0,
-      y: 0,
-      r: this.props.chartR
-    }
-  }
 
   handleChange = name => event => {
+    event.preventDefault();
+
     if(!isNaN(parseFloat((String)(event.target.value).replace(',', '.')))) {
       this.setState({
         [name]: (String)(event.target.value).replace(',', '.'),
@@ -26,18 +19,29 @@ class DataInputComponent extends React.Component{
       this.props.makeWarning(name + " should be a number");
     }
   };
-
   /* TODO something wrong happens:
     if I change r value a fetch request is sent to the server.
    once it fall down at all
    dots are being added by themselves using data in inputs
   */
   changeR = event => {
+    event.preventDefault();
+
     this.setState({
       r: +event.target.value
     });
     this.props.updateChart(+event.target.value);
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      x: 0,
+      y: 0,
+      r: this.props.chartR
+    };
+  }
 
   createOptions() {
     let result = [];

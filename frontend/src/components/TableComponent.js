@@ -7,32 +7,38 @@ class TableComponent extends React.Component{
   constructor(props){
     super(props);
 
-    this.state={
-      dots: [
-        {x: 0, y: 0, r: 1, inArea: true},
-        {x: 1, y: 0, r: 1, inArea: true}
-      ]
+    this.getRows = this.getRows.bind(this);
+  }
+
+  getRows() {
+    let result = [];
+
+    for (let i = 0; i < this.props.dots.length; i++) {
+      let dot = this.props.dots[i];
+      if (dot.r === this.props.chartR) {
+        result.push(
+          <tr>
+            <td>{dot.x.toFixed(3)}</td>
+            <td>{dot.y.toFixed(3)}</td>
+            <td>{dot.r}</td>
+            <td>{(String)(dot.inArea)}</td>
+          </tr>
+        )
+      }
     }
+
+    result.reverse();
+
+    return result;
   }
 
   render(){
-    const list = this.state.dots.map((item, index) => {
-      if (item.r === this.props.chartR) {
-        return <tr key={index}>
-          <td>{item.x}</td>
-          <td>{item.y}</td>
-          <td>{item.r}</td>
-          <td>{(String)(item.inArea)}</td>
-        </tr>;
-      }
-    });
-
     return(
       <div>
         <table id={'table'}>
           <tbody>
             <tr><td>x</td><td>y</td><td>r</td><td>result</td></tr>
-            {list}
+            {this.getRows()}
           </tbody>
         </table>
       </div>
@@ -42,7 +48,9 @@ class TableComponent extends React.Component{
 
 const mapStateToProps = (state) => {
   return {
-    chartR: state.chartR
+    updateChart: state.updateChart,
+    chartR: state.chartR,
+    dots: state.dots
   };
 };
 

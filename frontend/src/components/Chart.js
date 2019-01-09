@@ -5,23 +5,25 @@ import connect from "react-redux/es/connect/connect";
 
 class Chart extends Component{
   handleClick = event => {
+    event.preventDefault();
+
     const x = event.nativeEvent.offsetX - 150;
     const y = -event.nativeEvent.offsetY + 150;
     const c = this.getNormalizedCoordinates(x, y);
 
-    this.props.addDot(c.x, c.y, this.props.chartR);
+    this.props.addDot(c.x, c.y, this.props.chartR, this.checkDotInArea(c.x, c.y, this.props.chartR));
   };
 
   constructor(props) {
     super(props);
+    this.updateCanvas = this.updateCanvas.bind(this);
 
     this.state = {
       width: 300,
       height: 300,
-      r: 1
+      r: 1,
+      updatedDots: false
     };
-
-    this.updateCanvas = this.updateCanvas.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +33,7 @@ class Chart extends Component{
   componentDidUpdate() {
     this.updateCanvas();
   }
+
 
   // ret x=1.1 y=0
   getNormalizedCoordinates(x, y){
@@ -53,7 +56,11 @@ class Chart extends Component{
 
     this.draw(this.props.chartR);
 
-    if (this.props.dots.length === 0) {
+    if (this.state.updatedDots === false) {
+      this.setState({
+        updatedDots: true
+      });
+
       this.props.loadDots();
     }
 
@@ -66,18 +73,21 @@ class Chart extends Component{
     }
   }
 
+  checkDotInArea(x, y, r) {
+    if (y >= 0 && y <= r && x >= 0 && x <= r ||      // rect
+      y >= 0 && x <= 0 && y * y <= (r * r / 4 - x * x) ||  // segment
+      y <= 0 && x >= 0 && y >= x - r) {             // triangle
+      return true;
+    }
+
+    return false;
+  }
+
   drawDot(x, y) {
     let canvas = this.refs.canvas;
     let ctx = canvas.getContext("2d");
 
-    let isArea = false;
-    const r = this.props.chartR;
-
-    if (y >= 0 && y <= r && x >= 0 && x <= r ||      // rect
-      y >= 0 && x <= 0 && y * y <= (r * r / 4 - x * x) ||  // segment
-      y <= 0 && x >= 0 && y >= x - r) {             // triangle
-      isArea = true;
-    }
+    let isArea = this.checkDotInArea(x, y, this.props.chartR);
 
     const c = this.getChartCoordinates(x, y);
 
@@ -90,7 +100,7 @@ class Chart extends Component{
     }
 
     ctx.beginPath();
-    ctx.arc(c.x, c.y, 3, 0, Math.PI * 2, false);
+    ctx.arc(c.x, c.y, 2, 0, Math.PI * 2, false);
     ctx.fill();
     ctx.closePath();
     ctx.stroke();
@@ -207,7 +217,7 @@ class Chart extends Component{
   render(){
     return(
       <div>
-        {this.props.updateChart === true ? this.updateCanvas() : ''}
+        {this.props.updateChart === true ? this.updateCanvas() : null}
         <canvas ref="canvas" width={this.state.width} onClick={this.handleClick} height={this.state.height}/>
       </div>
     )

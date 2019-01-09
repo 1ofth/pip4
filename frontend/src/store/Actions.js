@@ -143,7 +143,7 @@ export function register(login, password) {
   };
 }
 
-export function addDot(x, y, r) {
+export function addDot(x, y, r, inArea) {
   return (dispatch) => {
     let data = new URLSearchParams();
     data.append('X', x);
@@ -162,7 +162,7 @@ export function addDot(x, y, r) {
         if (response.ok) {
           dispatch({
             type: DOT_ADDED,
-            payload: {x, y, r}
+            payload: {x, y, r, inArea}
           });
         } else {
           dispatch({

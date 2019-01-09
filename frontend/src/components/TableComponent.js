@@ -39,7 +39,7 @@ class TableComponent extends React.Component{
       <div>
         <table id={'table'}>
           <tbody>
-            <tr><td>x</td><td>y</td><td>r</td><td>result</td></tr>
+            <tr id={'tableTitle'}><td>x</td><td>y</td><td>r</td><td>result</td></tr>
             {this.getRows()}
           </tbody>
         </table>

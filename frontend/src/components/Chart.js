@@ -4,9 +4,12 @@ import {addDot, loadDots, makeWarning, updateChartFinished} from "../store/Actio
 import connect from "react-redux/es/connect/connect";
 
 export function checkDotInArea(x, y, r) {
-  return y >= 0 && y <= r && x >= 0 && x <= r ||      // rect
-    y >= 0 && x <= 0 && y * y <= (r * r / 4 - x * x) ||  // segment
-    y <= 0 && x >= 0 && y >= x - r;
+  x = (+x).toFixed(3);
+  y = (+y).toFixed(3);
+
+  return ((y >= 0 && y <= r && x >= 0 && x <= r) ||      // rect
+    (y >= 0 && x <= 0 && y * y <= (r * r / 4 - x * x)) ||  // segment
+    (y <= 0 && x >= 0 && y >= x - r));
 }
 
 class Chart extends Component{

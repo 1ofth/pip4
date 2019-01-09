@@ -167,7 +167,7 @@ export function addDot(x, y, r, inArea) {
         } else {
           dispatch({
             type: WARNING,
-            payload: 'You should check \'x\' and \'y\' values to be correct ( -5 <= x <= 3, -3 < y < 5 )'
+            payload: 'You should check \'x\' and \'y\' values to be correct ( -5 <= x <= 3, -3 <= y <= 5 )'
           });
         }
       })

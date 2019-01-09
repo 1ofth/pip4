@@ -49,20 +49,21 @@ class Chart extends Component{
   }
 
   updateCanvas(){
+    this.props.updateChartFinished();
+
     this.draw(this.props.chartR);
+
+    if (this.props.dots.length === 0) {
+      this.props.loadDots();
+    }
 
     for (let i = 0; i < this.props.dots.length; i++) {
       const dot = this.props.dots[i];
 
       if (dot.r === this.props.chartR) {
-
-
         this.drawDot(dot.x, dot.y);
       }
     }
-
-    this.props.updateChartFinished();
-
   }
 
   drawDot(x, y) {
@@ -206,7 +207,7 @@ class Chart extends Component{
   render(){
     return(
       <div>
-        {this.props.updateChart !== undefined && this.props.updateChart === true ? this.updateCanvas() : ''}
+        {this.props.updateChart === true ? this.updateCanvas() : ''}
         <canvas ref="canvas" width={this.state.width} onClick={this.handleClick} height={this.state.height}/>
       </div>
     )

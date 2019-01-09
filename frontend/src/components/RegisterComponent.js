@@ -22,8 +22,6 @@ class RegisterComponent extends React.Component{
     });
   };
 
-
-  // TODO make it work!
   registerUser = (login, password) => event => {
     this.props.register(login, password);
   };

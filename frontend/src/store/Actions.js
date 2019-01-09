@@ -65,8 +65,26 @@ export function login(login, password) {
 }
 
 export function logout() {
-  return{
-    type: LOGOUT
+  return (dispatch) => {
+    fetch('http://localhost:8080/lab4/secure/logout', {
+      method: 'POST',
+      body: '',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      credentials: 'include'
+
+    }).then(() => {
+      dispatch({
+        type: LOGOUT
+      });
+    })
+      .catch(error => {
+        dispatch({
+          type: WARNING,
+          payload: 'There has been a problem while fetching: ' + error.message
+        });
+      });
   }
 }
 
@@ -196,7 +214,7 @@ export function tableUpdated() {
 export function updateChart(newR) {
   return{
     type: UPDATE_CHART,
-    payload: newR
+    payload: +newR
   }
 }
 

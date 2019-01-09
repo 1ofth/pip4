@@ -78,12 +78,14 @@ public class UserController {
 
     @POST
     @Path("secure/logout")
-    public void logOut(@Context HttpServletRequest req,
-                       @Context HttpServletResponse resp) {
+    public Response logOut(@Context HttpServletRequest req,
+                           @Context HttpServletResponse resp) {
         try {
             req.getSession().invalidate();
+            return Response.status(Response.Status.OK).build();
         } catch (Exception e) {
             e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 

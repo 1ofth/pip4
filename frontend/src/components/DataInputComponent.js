@@ -27,22 +27,22 @@ class DataInputComponent extends React.Component{
     }
   };
 
-  changeR = r => event => {
+  /* TODO something wrong happens:
+    if I change r value a fetch request is sent to the server.
+   once it fall down at all
+   dots are being added by themselves using data in inputs
+  */
+  changeR = event => {
     this.setState({
-      r: event.target.value,
+      r: +event.target.value
     });
-
-    this.props.updateChart(event.target.value);
-  };
-
-  checkDot = (x, y, r) => event => {
-    this.props.addDot(x, y, r);
+    this.props.updateChart(+event.target.value);
   };
 
   createOptions() {
     let result = [];
     for (let i = 5; i > 0; i--) {
-      result.push(<option selected={this.props.chartR == i} value={(String)(i)}>{i}</option>);
+      result.push(<option selected={+this.props.chartR === i} value={(String)(i)}>{i}</option>);
     }
     return result;
   }
@@ -67,12 +67,12 @@ class DataInputComponent extends React.Component{
 
         <div className={'inputField'}>
           Y
-          <input type={'text'} value={this.state.y} onChange={this.handleChange('y')}/>
+          <input type={'text'} onChange={this.handleChange('y')}/>
         </div>
 
         <div className={'inputField'}>
           R
-          <select onChange={this.changeR('r')}>
+          <select onChange={this.changeR}>
             {this.createOptions()}
           </select>
         </div>
@@ -83,7 +83,7 @@ class DataInputComponent extends React.Component{
           disabled={
             this.props.warning !== undefined && (String)(this.props.warning).indexOf('should be a number') >= 0
           }
-          onClick={this.checkDot(this.state.x, this.state.y, this.state.r)}
+          //onClick={this.props.addDot(this.state.x, this.state.y, this.state.r)}
           value={'Check'}
         />
       </div>
@@ -93,8 +93,7 @@ class DataInputComponent extends React.Component{
 
 const mapStateToProps = (state) => {
   return {
-    chartR: state.chartR,
-    warning: state.message
+    chartR: state.chartR
   };
 };
 

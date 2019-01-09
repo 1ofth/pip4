@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {addDot, makeWarning, updateChart} from "../store/Actions";
+import {makeWarning} from "../store/Actions";
 
 class TableComponent extends React.Component{
   constructor(props){
@@ -48,9 +48,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    makeWarning : bindActionCreators(makeWarning, dispatch),
-    newDot: bindActionCreators(addDot, dispatch),
-    updateChart: bindActionCreators(updateChart, dispatch)
+    makeWarning: bindActionCreators(makeWarning, dispatch)
   }
 };
 

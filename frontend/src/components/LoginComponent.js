@@ -22,7 +22,6 @@ class LoginComponent extends React.Component{
     });
   };
 
-  // TODO make it work!
   loginUser = (login, password) => event => {
     this.props.loginU(login, password);
   };

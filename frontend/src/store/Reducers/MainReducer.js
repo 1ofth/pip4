@@ -25,7 +25,7 @@ export default function MainReducer(state = initialState, action) {
 
 
     case LOGOUT:
-      return {...state, message: '', login: ''};
+      return {...state, message: '', login: '', dots: []};
 
     case LOGIN_SACCEED:
       return {...state, message: '', login: action.payload};
@@ -54,7 +54,7 @@ export default function MainReducer(state = initialState, action) {
         temp = state.dots;
       }
 
-      temp.concat(action.payload);
+      temp = temp.concat(action.payload);
 
       return {...state, message: '', dots: temp};
     }

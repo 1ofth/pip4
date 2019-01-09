@@ -13,9 +13,11 @@ class TableComponent extends React.Component{
   getRows() {
     let result = [];
 
+    const shouldRValuesBeEqual = false;
+
     for (let i = 0; i < this.props.dots.length; i++) {
       let dot = this.props.dots[i];
-      if (dot.r === this.props.chartR) {
+      if (!shouldRValuesBeEqual || dot.r === this.props.chartR) {
         result.push(
           <tr>
             <td>{(+dot.x).toFixed(2)}</td>

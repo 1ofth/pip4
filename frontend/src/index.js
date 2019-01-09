@@ -28,10 +28,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Switch>
-        <Route exact={true} path={path} component={MainPage}/>
-        <Route exact={true} path={path + LOGIN_PAGE} component={LoginPage}/>
-        <Route exact={true} path={path + REGISTRATION_PAGE} component={RegisterPage}/>
-        <Route exact={true} path={path + MAIN_PAGE} component={MainPage}/>
+        <Route exact path={path} component={MainPage}/>
+        <Route path={path + LOGIN_PAGE} component={LoginPage}/>
+        <Route path={path + REGISTRATION_PAGE} component={RegisterPage}/>
+        <Route path={path + MAIN_PAGE} component={MainPage}/>
         <Route component={NotFoundPage}/>
       </Switch>
     </Router>

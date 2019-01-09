@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {makeWarning, register, registered} from '../store/Actions';
+import {makeWarning, register} from '../store/Actions';
 
 class RegisterComponent extends React.Component{
   constructor(props){
@@ -28,31 +28,44 @@ class RegisterComponent extends React.Component{
 
   render(){
     return (
-      <div className={'inputs'}>
-        <div>
-          <input
-            type='text'
-            value = {this.props.login}
-            onChange={this.handleChange('login')}
-          />
-        </div>
-
-        <div>
-          <input
-            type='password'
-            value = {this.props.password}
-            onChange={this.handleChange('password')}
-          />
-        </div>
-
-        <div>
-          <input
-            type='button'
-            value='Register'
-            onClick={this.registerUser(this.state.login, this.state.password)}
-          />
-        </div>
-      </div>
+      <table className={'inputs'}>
+        <tbody>
+        <tr>
+          <td>
+            Login
+          </td>
+          <td>
+            <input
+              type='text'
+              value={this.props.login}
+              onChange={this.handleChange('login')}
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Password
+          </td>
+          <td>
+            <input
+              type='password'
+              value={this.props.password}
+              onChange={this.handleChange('password')}
+            />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input
+              type='button'
+              value='Register'
+              onClick={this.registerUser(this.state.login, this.state.password)}
+            />
+          </td>
+        </tr>
+        </tbody>
+      </table>
     );
   }
 }

@@ -2,6 +2,17 @@ body {
     background-image: url(back.png);
 }
 
+.specialLink {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+
+    text-decoration: none;
+    color: black;
+
+    max-width: 120px;
+}
+
 .warning {
     color: #FF4136;
 
@@ -35,7 +46,7 @@ body {
     display: block;
     text-align: center;
 
-    width: 200px;
+    width: 250px;
 }
 
 

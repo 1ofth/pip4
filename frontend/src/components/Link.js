@@ -21,7 +21,7 @@ class SpecialLink extends React.Component {
 
   render(){
     return (
-      <Link onClick={this.clearWarning} to={this.props.path}>{this.props.label}</Link>
+      <Link className={'specialLink'} onClick={this.clearWarning} to={this.props.path}>{this.props.label}</Link>
     );
   }
 }

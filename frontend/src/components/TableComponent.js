@@ -18,8 +18,8 @@ class TableComponent extends React.Component{
       if (dot.r === this.props.chartR) {
         result.push(
           <tr>
-            <td>{dot.x.toFixed(3)}</td>
-            <td>{dot.y.toFixed(3)}</td>
+            <td>{(+dot.x).toFixed(2)}</td>
+            <td>{(+dot.y).toFixed(2)}</td>
             <td>{dot.r}</td>
             <td>{(String)(dot.inArea)}</td>
           </tr>

@@ -3,10 +3,17 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {addDot, makeWarning, updateChart} from "../store/Actions";
 
-class DataInputComponent extends React.Component{
+import {checkDotInArea} from "./Chart";
 
+
+class DataInputComponent extends React.Component{
   handleChange = name => event => {
     event.preventDefault();
+
+    if ((String)(event.target.value).length > 8) {
+      this.props.makeWarning(name + " should have not more than 7 digits");
+      return;
+    }
 
     if(!isNaN(parseFloat((String)(event.target.value).replace(',', '.')))) {
       this.setState({
@@ -19,6 +26,22 @@ class DataInputComponent extends React.Component{
       this.props.makeWarning(name + " should be a number");
     }
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      x: 0,
+      y: 0,
+      r: this.props.chartR
+    };
+
+    this.addNewDot = this.addNewDot.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.changeR = this.changeR.bind(this);
+    this.createOptions = this.createOptions.bind(this);
+  }
+
   /* TODO something wrong happens:
     if I change r value a fetch request is sent to the server.
    once it fall down at all
@@ -33,14 +56,15 @@ class DataInputComponent extends React.Component{
     this.props.updateChart(+event.target.value);
   };
 
-  constructor(props) {
-    super(props);
+  addNewDot(event) {
+    event.preventDefault();
 
-    this.state = {
-      x: 0,
-      y: 0,
-      r: this.props.chartR
-    };
+    this.props.addDot(
+      this.state.x,
+      this.state.y,
+      this.state.r,
+      checkDotInArea(this.state.x, this.state.y, this.state.r)
+    );
   }
 
   createOptions() {
@@ -87,7 +111,7 @@ class DataInputComponent extends React.Component{
           disabled={
             this.props.warning !== undefined && (String)(this.props.warning).indexOf('should be a number') >= 0
           }
-          //onClick={this.props.addDot(this.state.x, this.state.y, this.state.r)}
+          onClick={this.addNewDot}
           value={'Check'}
         />
       </div>

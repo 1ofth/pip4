@@ -1,9 +1,10 @@
 import React from 'react';
 import Header from "../components/Header";
-import Links from "../components/Links";
 import LoginComponent from "../components/LoginComponent";
 import WarningComponent from "../components/WarningComponent";
 
+import {REGISTRATION_PAGE} from "../Views";
+import SpecialLink from '../components/Link';
 
 export default class LoginPage extends React.Component{
   render(){
@@ -30,7 +31,7 @@ export default class LoginPage extends React.Component{
 
               <WarningComponent/>
 
-              <Links/>
+              <SpecialLink path={REGISTRATION_PAGE} label={'Register!'}/>
             </div>
           }
         </div>

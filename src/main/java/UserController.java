@@ -24,11 +24,13 @@ public class UserController {
                               @Context HttpServletRequest req) {
         User user = userService.findOne(login);
 
+        Hash hash = new Hash();
+
         if (user == null) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("User with such name is not registered yet")
                     .build();
-        } else if (!user.getPassword().equals((password))) {
+        } else if (!user.getPassword().equals(hash.getHash(password))) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Incorrect user password")
                     .build();
@@ -46,7 +48,9 @@ public class UserController {
                             @FormParam("password") String password,
                             @Context HttpServletRequest req) {
 
-        User user = new User(login, password);
+        Hash hash = new Hash();
+
+        User user = new User(login, hash.getHash(password));
         if (validateCredentials(login, password) && userService.findOne(login) == null) {
             userService.saveUser(user);
             req.getSession().setAttribute("login", login);

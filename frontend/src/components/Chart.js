@@ -3,6 +3,12 @@ import {bindActionCreators} from "redux";
 import {addDot, loadDots, makeWarning, updateChartFinished} from "../store/Actions";
 import connect from "react-redux/es/connect/connect";
 
+export function checkDotInArea(x, y, r) {
+  return y >= 0 && y <= r && x >= 0 && x <= r ||      // rect
+    y >= 0 && x <= 0 && y * y <= (r * r / 4 - x * x) ||  // segment
+    y <= 0 && x >= 0 && y >= x - r;
+}
+
 class Chart extends Component{
   handleClick = event => {
     event.preventDefault();
@@ -11,12 +17,14 @@ class Chart extends Component{
     const y = -event.nativeEvent.offsetY + 150;
     const c = this.getNormalizedCoordinates(x, y);
 
-    this.props.addDot(c.x, c.y, this.props.chartR, this.checkDotInArea(c.x, c.y, this.props.chartR));
+    this.props.addDot(c.x, c.y, this.props.chartR, checkDotInArea(c.x, c.y, this.props.chartR));
   };
 
   constructor(props) {
     super(props);
+
     this.updateCanvas = this.updateCanvas.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       width: 300,
@@ -73,21 +81,11 @@ class Chart extends Component{
     }
   }
 
-  checkDotInArea(x, y, r) {
-    if (y >= 0 && y <= r && x >= 0 && x <= r ||      // rect
-      y >= 0 && x <= 0 && y * y <= (r * r / 4 - x * x) ||  // segment
-      y <= 0 && x >= 0 && y >= x - r) {             // triangle
-      return true;
-    }
-
-    return false;
-  }
-
   drawDot(x, y) {
     let canvas = this.refs.canvas;
     let ctx = canvas.getContext("2d");
 
-    let isArea = this.checkDotInArea(x, y, this.props.chartR);
+    let isArea = checkDotInArea(x, y, this.props.chartR);
 
     const c = this.getChartCoordinates(x, y);
 

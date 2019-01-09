@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from "../components/Header";
-import Links from "../components/Links";
 import Chart from "../components/Chart";
 import DataInputComponent from "../components/DataInputComponent";
 import TableComponent from "../components/TableComponent";
@@ -28,8 +27,6 @@ export default class MainPage extends React.Component {
             <TableComponent/>
           </div>
         }
-
-        <Links/>
       </div>
     );
   }
